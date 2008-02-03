@@ -1,0 +1,518 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf380
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;\f2\fnil\fcharset77 Monaco;
+}
+{\colortbl;\red255\green255\blue255;\red10\green1\blue17;\red0\green0\blue191;\red191\green0\blue0;
+\red0\green115\blue0;\red96\green96\blue96;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs32 \cf2 Conductor\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf2 	 	
+\f0\b \
+	Superclass: Environment\
+	related classes:  ConductorPlayer, ConductorGUI, ConductorSettingsGUI, \
+				   CV, SV, CVPreset, CVInterpolator, 
+\f1\b0 \
+\
+
+\f0\b\fs30 	Overview\
+	
+\f1\b0 	\
+
+\fs24 	
+\f0\b Conductor 
+\f1\b0 provides a framework for defining interactive programs in SuperCollider3.  A Conductor is \
+	an Environment. Its components are entries in that environment; their keys are frequently used in \
+	configuring the conductor.  For example, a Conductor's 
+\f0\b value 
+\f1\b0 and 
+\f0\b value_ 
+\f1\b0 methods iterate over an\
+	array of keys held in the instance variable 
+\f0\b valueKeys
+\f1\b0 . \
+	\
+	The basic components of a Conductor are defined by the following classes:\
+
+\f0\b 	
+\f1\b0 	\
+	
+\f0\b [CV] 
+\f1\b0 defines a single control value or array of values constrained by one ControlSpec. \
+	\
+	
+\f0\b [CVPreset]
+\f1\b0  saves and restores multiple setting for an array of CVs (and other objects\
+	that respond to 
+\f0\b input 
+\f1\b0  and 
+\f0\b input_(inputValue), 
+\f1\b0 including Conductor, CVPreset, and ConductorPlayer
+\f0\b  
+\f1\b0 ).\
+	\
+	
+\f0\b [ConductorPlayer] 
+\f1\b0 controls the execution of programs using stop, play, pause, and resume methods.\
+	When a ConductorPlayer executes,  it sets currentEnvironment to its Conductor so all programs run\
+	within the environment defined by the Conductor and bundles all messages for the Server or Servers \
+	stored in its 
+\f0\b server 
+\f1\b0 instance variable.\
+	\
+	
+\f0\b [ConductorGUI] 
+\f1\b0 defines the Conductor's GUI. It is an Environment that defines a "style sheet" of standard \
+	gui functions used to display the components of the conductor. Ttwo instance variables determine which\
+	components are to be displayed:\
+		
+\f0\b header - 
+\f1\b0 an array of keys that identify components to be displayed at the top of the GUI
+\f0\b  
+\f1\b0 \
+		
+\f0\b keys 
+\f1\b0 - an array of keys that identify components to be displayed in the body of the GUI\
+\
+	
+\f0\b [ConductorSettingsGUI] 
+\f1\b0 defines the GUI representation for the Conductor's file access methods.\
+
+\f0\b 	
+\f1\b0 \
+	
+\f0\b Conductor: 
+\f1\b0 One Conductor can be a component of another, providing hierarchical control. \
+	By default, a Conductor has a ConductorPlayer, a ConductorSettingsGUI, and  a  CVPreset \
+	assigned to the keys 
+\f0\b player, settings 
+\f1\b0 and 
+\f0\b preset
+\f1\b0  and the array 
+\f0\b #[player, settings, preset] 
+\f1\b0 is the\
+	default value of the ConductorGUI's header.\
+			  \
+
+\fs26 	
+\f0\b\fs30 Class Methods\
+
+\f1\b0\fs24 		\
+
+\f0\b 	*make (function)\
+
+\f1\b0 		\
+		The first argument of the function is set to the Conductor being constructed.\
+		Subsequent arguments are initalized as CVs; arguments with default values are \
+		set to instances of the class the default value specifies.\
+		\
+		Below, the first line defines a Conductor with four CV's assigned to the arguments 
+\f0\b a,b,c,d
+\f1\b0 .\
+		The second line displays that Conductor.\cf0 \
+		\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2 \cf0 		(	\
+			c = \cf3 Conductor\cf0 .make \{ \cf3 | conductor, a, b, c, d |\cf0   \};    \
+			c.show;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1 \cf0 		)\
+			 	\
+\cf2 	
+\f2 \cf0 	(	// here the CV d is initialized to an array of values.\
+			c = \cf3 Conductor\cf0 .make \{ \cf3 | conductor, a, b, c, d |\cf0  d.value_(1/(1..128)) \};    \
+			c.show;\
+
+\f1 		)\
+	\
+	
+\f0\b\fs30 \cf2 Instance Variables\
+	
+\f1\b0\fs24 	\
+		
+\f0\b gui 
+\f1\b0 - an instance of 
+\f0\b [ConductorGUI] 
+\f1\b0 .\
+\
+		
+\f0\b preset 
+\f1\b0 - an instance of 
+\f0\b [ConductorPreset]
+\f1\b0 , which provides preset values for a user specified\
+		collection of CV's and Conductor's.\
+		\
+		
+\f0\b player 
+\f1\b0 - an instance of 
+\f0\b [ConductorPlayer]
+\f1\b0 , which provides unified stop/play/pause/resume control \
+		for Patterns, Tasks, and, on the server, synths, groups, buses, and buffers. (These objects use a 		variant of Server-sendBundle to guarantee correct order execution on the server.)\
+\
+		
+\f0\b path 
+\f1\b0 - stores the pathname of the file that saves the Conductor's settings and attempts to load\
+		those settings\
+		\
+		
+\f0\b valueKeys 
+\f1\b0 - an array of keys the identify which components should be saved. This usually includes\
+		both indvidual CVs and the Conductor's preset.	\
+		\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs28 \cf2 	Instance Methods\
+	\
+	
+\fs24 GUI related methods:\
+\
+		show		(argName, x, y, w, h)\
+		
+\f1\b0 Draw the Conductor within a window named argName at x,y with size w,h.\
+		\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 		draw		(window, name, conductor)\
+		
+\f1\b0 Draw the Conductor within the specified window\
+
+\f0\b \
+		
+\f1\b0 See 
+\f0\b ConductorGUI 
+\f1\b0 for more details
+\f0\b \
+\
+	Settings related methods:\
+	\
+		path_		(filePath)\
+			
+\f1\b0 Load the settings stored in the file identified by filePath.\
+		
+\f0\b value\
+			
+\f1\b0 Returns an array of the values of all components identified by valueKeys
+\f0\b \
+		value_ (valueArray)\
+			
+\f1\b0 Iterates over the the array assigning the value to be the value of the corresponding\
+		component identified by valueKeys\
+		
+\f0\b \
+		noSettings 		
+\f1\b0 no file controls are displayed
+\f0\b \
+		useSettings		
+\f1\b0 allow a single set of settings to be saved to file and restored from file\
+	
+\f0\b \
+	Preset related methods:\
+	\
+		presetKeys_	(keys, preset)\
+			
+\f1\b0 The objects at the keys will have their settings saved and restored by preset, which\
+		defaults to the object in the preset instance variable.\
+			
+\f0\b \
+		interpKeys_	(keys, preset)\
+			
+\f1\b0 The objects at the keys (which must be a subset of the valueKeys of the preset) can \
+		have their settings interpolated between preset values.
+\f0\b \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs28 \cf2 		\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs24 \cf2 		usePresets		
+\f1\b0 creates a CVPreset, gives it valueKeys as its default presetKeys
+\f0\b \
+\
+		useInterpolator	
+\f1\b0 creates a CVInterpolator, sets valueKeys to be both presetKeys\
+			and interpKeys
+\f0\b \
+	Player related methods:\
+	\
+		stop\
+		play\
+		pause\
+		resume\
+
+\f1\b0 	\
+
+\f0\b 		action_		(playFunc, stopFunc, pauseFunc, resumeFunc)\
+			
+\f1\b0 Adds an 
+\f0\b ActionPlayer
+\f1\b0  which responds to play, stop, pause, and resume by evaluating \
+			the corresponding function with the Conductor as currentEnvironment.
+\f0\b \
+		task_		(function, clock, quant)\
+			
+\f1\b0 Adds a 
+\f0\b TaskPlayer
+\f1\b0  which plays the function within a task scheduled by the specified clock \
+			and quantization. (On stop, tasks that block on a message port are also be deleted.)
+\f0\b \
+		pattern_		(pattern, clock, event, quant)\
+			
+\f1\b0 Adds a 
+\f0\b PatternPlayer
+\f1\b0  which plays the pattern with the specified event, clock and quantization.\
+		
+\f0\b group_		( event, args)\
+			
+\f1\b0 The event is assigned CVEvent-groupEvent as its parent.
+\f0\b \
+
+\f1\b0 		
+\f0\b synth_		( event, args)\
+			
+\f1\b0 The event is assigned CVEvent-synthEvent as its parent.
+\f0\b \
+		\
+		
+\f1\b0 The argument 
+\f0\b args
+\f1\b0  is an interleaved array of keys and CVs (or value). \
+		CVs can also be altered  before being sent to the server and combinations of CVs can\
+		determine the value to be sent:\
+		\
+			value 	 		[freq:		 440  ]\
+			CV				[freq: 	aCV  ]\
+			altered CV		[freq: 	[ aCV, aCV.midicps ] ]\
+			combination		[freq:		[ [aCV, bCV], aCV.midicps + bCV] ]\
+			function			[freq:		[ aCV, \{ aCV.midicps.value + 33.rand \}]\
+
+\f0\b \
+		
+\f1\b0 The events use the same keys as note events in patterns. The keys 
+\f0\b server
+\f1\b0 , 
+\f0\b group
+\f1\b0 , and \
+		
+\f0\b addAction
+\f1\b0  and, for synths, 
+\f0\b instrument
+\f1\b0  determine the group or synth. As in patterns, the\
+		 default values for these keys are \
+		 	server: 		Server.default, \
+		 	group: 		1,\
+		 	addAction:	0, \
+		 	instrument:	 'default' \
+\
+		Usually the node ID of the group or synth is dynamically allocated, but the key id can be set \
+		to set the id directly.  For group events, a new group  or collection of groups is created with the\
+		specified id(s).  For synth events, no synths are created, but the control values determined by \
+		the event are sent to the specified id(s).\
+		\
+		
+\f0\b controlBus_	( event, cvs)\
+			
+\f1\b0 The event can specify\
+			server:	aServer (defaults to Server.default)\
+			index: 	(optional)\
+
+\f0\b 			
+\f1\b0 CVs is an array of CVs that are used to determine the value of consecutive buses
+\f0\b \
+	\
+
+\f1\b0 		
+\f0\b buffer_		( event)\
+			
+\f1\b0 This event is designed primarily for small waveform buffers, it specifies:\
+			server:	aServer (defaults to Server.default)\
+			cv:		a CV that determines the values in the buffer\
+			msg:		A symbol that determines how the values are used to fill the buffer.\
+					Is is one of: \\
+\f0\b sine1
+\f1\b0 , \\
+\f0\b cheby
+\f1\b0 , \\
+\f0\b wave
+\f1\b0 , or \\
+\f0\b signa
+\f1\b0 \
+			display:	anotherCV\
+				An optional CV used to display the contents of the buffer (as received from the server)			size:		integer (defaults to 512 and should not exceed 1024).\
+
+\f0\b 	\
+	
+\f1\b0 	
+\f0\b\fs30 Using Conductor
+\fs24 \
+
+\f1\b0 	\
+		The messages 
+\f0\b spec_(specName, default) 
+\f1\b0 and 
+\f0\b sp(default, lo, hi, step, warp) 
+\f1\b0 can be used to set\
+		the range of values a CV can assume (see 
+\f0\b [CV] 
+\f1\b0 for details).  In this example, the CV assigned to\
+		d is given an array as a default value.\
+\cf0 		\
+		(\
+		\cf4 // Changing CV ranges\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2 \cf0 			c = \cf3 Conductor\cf0 .make \{ \cf3 |conductor, a, b, c, d |\cf0  \
+				a	.spec_(\cf5 \\freq\cf0 );\
+				b	.spec_(\cf5 \\freq\cf0 , 880);\
+				c	.sp(1, 0, 15, 1);\
+				d	.spec_(\cf5 \\unipolar\cf0 ,1/(1..128));\
+			\};    \
+			c.show;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1 \cf0 		)\
+\
+		(\
+		\cf4 // 
+\f0\b action_
+\f1\b0 can control any kind of user program, \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2 \cf0 			c = \cf3 Conductor\cf0 .make \{ \cf3 |conductor, freq, db, dur |\cf0  \
+				freq	.spec_(\cf5 \\freq\cf0 );\
+				db		.spec_(\cf5 \\db\cf0 , -10);\
+				dur		.sp(0.2, 0.05, 1, 0, \cf5 'exp'\cf0 );\
+				\
+				\cf4 // add a pattern using actions,\
+				// notice the use of ~player, an environment variable\
+				// within the Conductor\cf0 \
+				conductor.action_(\
+					\{ ~pat = \cf3 Pbind\cf0 (*[freq: freq * 2, db: db, dur: dur/2])\
+					  			.play(quant: 0);\
+					\},\
+					\{ ~pat.stop \},\
+					\{ ~pat.pause\},\
+					\{ ~pat.resume\}\
+				);\
+				conductor.name_("test");\
+			\};    \
+			c.show;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1 \cf0 		)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2 \cf0 		(	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1 \cf4 		// but convenience methods such as\cf0  
+\f0\b \cf4 pattern_ 
+\f1\b0  are more concise\cf0 \
+		
+\f2 \
+		c = \cf3 Conductor\cf0 .make \{ \cf3 |conductor, freq, db, dur |\cf0  \
+				freq	.spec_(\cf5 \\freq\cf0 );\
+				db		.spec_(\cf5 \\db\cf0 , -10);\
+				dur		.sp(0.2, 0.05, 1, 0, \cf5 'exp'\cf0 );\
+\
+				conductor.pattern_( \
+					\cf3 Pbind\cf0 (*[freq: freq * 2, db: db, dur: dur/2]), \
+					quant: 0\
+				)			\
+			\};    \
+			c.show;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1 \cf0 		)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf0 		\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf0 		
+\f0\b (\
+	
+\f1\b0 	\cf4 // Controlling a synth\cf0 \
+	
+\f0\b 	
+\f1\b0 \cf3 Conductor\cf0 .make(\{ \cf3 arg\cf0  conductor, freq, volIndB;		\
+			freq	.spec_(\cf5 \\freq\cf0 );\
+			volIndB	.sp(-20,-100,20);\
+	\
+			conductor.
+\f0\b synth_
+\f1\b0 ( \
+				(	instrument: \cf5 \\default\cf0 , 		\cf4 // this Event is explicitly specifying all the default values\cf0 \
+					addAction: 1, \
+					group: 1, \
+					server: \cf3 Server\cf0 .default\
+				), \
+				[freq: freq, amp: [volIndB, volIndB.dbamp], pan: -1 ]);\
+	\
+		\}).show\
+		)\
+	
+\f0\b \
+	(\
+
+\f1\b0 	\cf4 // Controlling a Pattern and a Group\cf0 \
+	\cf4 //  'vol' is assigned to both the Pattern and the Pattern's group\
+	// this provides continuous control of the pattern's notes as they are sounding\cf0 \
+	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf0 	
+\f1\b0 b = \cf3 Conductor\cf0 .make(\{ \cf3 arg\cf0  conductor, freq, vol;		\
+		freq	.spec_(\cf5 \\freq\cf0 );\
+		vol	.sp(-20,-100,20);\
+		\
+		conductor.name_( \cf6 "a group used to control a pattern's synths"\cf0 );\
+		conductor.
+\f0\b group_
+\f1\b0 ( (id: [22], group: 0, addAction: 1), [amp: [vol, vol.dbamp]  ]);		conductor.
+\f0\b pattern_
+\f1\b0 (\cf3 Pbind\cf0 \
+			(\cf5 \\freq\cf0 , \cf3 Pwhite\cf0 (1.0,2.0) * freq,\
+			\cf5 \\db\cf0 , vol, \
+			\cf5 \\dur\cf0 , \cf3 Prand\cf0 ([0.2, 1.2],\cf3 inf\cf0 ),\
+			 \cf5 \\group\cf0 , 22, \
+			 \cf5 \\legato\cf0 , 10), \
+		quant:0 );\
+\
+	 \} );\
+	 \
+	 b.show;\
+	)\
+	\
+
+\f0\b 	(	\
+	
+\f1\b0 \cf4 // Using a Buffer and interpolation
+\f0\b \cf0 \
+	
+\f1\b0 c = \cf3 Conductor\cf0 .make(\{ \cf3 arg\cf0  conductor,  freq, vol, overtones, waveform;\
+		\cf3 var\cf0  buf;\
+			freq			.spec_(\cf5 \\freq\cf0 );\
+			vol			.sp(-20,-100,20);\
+			overtones		.sp(1/(1..64),0, 1);\
+			waveform		.spec_(\cf5 \\bipolar\cf0 , \cf3 Array\cf0 .fill(512,0));\
+			\cf3 SynthDef\cf0  (\cf6 "osc"\cf0 , \{ \cf3 |out = 0, freq = 200, amp = 0.1, bufnum |\cf0  \
+				\cf3 Out\cf0 .ar(out, \cf3 Osc\cf0 .ar(bufnum, freq, 0, amp) ) \
+			\}).store;\
+			conductor.
+\f0\b name_
+\f1\b0 (\cf6 "synth"\cf0 );\
+			conductor.buffer_(buf = (msg: \cf5 \\sine1\cf0 , cv: overtones, display: waveform) );\
+			b = buf;\
+			conductor.synth_(a = (instrument: \cf5 \\osc\cf0 ), [\
+				freq: [freq, freq * 3/2], amp: [vol, vol.dbamp], bufnum:  \{ buf.bufnum \} ]) \
+		\});\
+		c.valueKeys_(#[overtones]);\
+		c.useInterpolator;\
+	\cf4 //	c.usePresets;\cf0 \
+		d = c.show;\
+	)\
+\
+}

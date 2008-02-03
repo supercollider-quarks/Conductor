@@ -1,0 +1,74 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf380
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red7\green7\blue7;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs32 \cf2 CVPreset\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf2 	 	
+\f0\b \
+	related classes: CVinterpolator, CV, Conductor, ConductorGUI\
+
+\f1\b0 \
+
+\f0\b 	CVPreset
+\f1\b0  saves 'presets' for an array of CVs or other objects that respond to 
+\f0\b input 
+\f1\b0 and 
+\f0\b input_.\
+	[CVInterpolator] 
+\f1\b0 is a CVPreset also able to interpolate between settings.\
+	
+\f0\b \
+	Instance Variables\
+		items		
+\f1\b0 the items to be saved/restored
+\f0\b \
+		presets		
+\f1\b0 the actual collections of different presets\
+
+\f0\b 		presetCV		
+\f1\b0 CV determines which preset to load
+\f0\b \
+		\
+	Instance Methods\
+	\
+		note: 
+\f1\b0 Selecting presets is done by changing the value of 
+\f0\b presetCV\
+		\
+		value 		
+\f1\b0 returns the contents of presets
+\f0\b \
+		value_(v)		
+\f1\b0 sets preset to v
+\f0\b \
+		input		
+\f1\b0 returns an array of input values for each of the elements of 
+\f0\b items\
+		input_(ins)	
+\f1\b0 iterates over ins, setting the input of corresponding cvs
+\f0\b \
+		\
+		add			
+\f1\b0 add this.input as a new preset\
+		
+\f0\b remove		
+\f1\b0 remove the current preset (identified by presetCV)\
+		
+\f0\b set(index)	
+\f1\b0 recall the preset at index\
+		\
+		
+\f0\b draw(win, name, preset) 
+\f1\b0 	draw the received using the function found at ~presetGUI
+\f0\b \
+		\
+		\
+	
+\f1\b0 Comment: all control of preset selection and interpolation is done through presetCV, targetCV, and\
+	interpCV.
+\f0\b \
+		\
+}

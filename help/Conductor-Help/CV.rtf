@@ -1,0 +1,527 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf380
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;\f2\fnil\fcharset77 Monaco;
+\f3\fswiss\fcharset77 Helvetica-Oblique;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue191;\red0\green115\blue0;\red191\green0\blue0;
+\red96\green96\blue96;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs36 \cf0 CV
+\f1\b0\fs24 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf0 superclass: Stream\
+related classes: SV, Conductor\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf0 A 
+\f0\b CV
+\f1\b0  models a single floating point value or an array of such values constrained to a specific numerical\
+range by a ControlSpec. 
+\f0\b [SV] 
+\f1\b0 is a derived class that defines an index into an array.\
+\
+CV is derived from Stream so it can be used directly in Stream and Pattern  definitions.  \
+A set of 
+\f0\b connect 
+\f1\b0 methods have been defined for different SCViews to synchronize CV's with their\
+GUI representations.  A similar set of methods have been defined that connect\
+argument arrays consisting of keys and CVs to nodes, buses, buffers, and NodeProxys.\
+\
+An 
+\f0\b SV 
+\f1\b0 is a CV that models an index into an array of Symbols.  The array is held in the instance \
+variable 
+\f0\b items
+\f1\b0 . The symbol corresponding to the CV's current value can be accessed with the \
+method 
+\f0\b item
+\f1\b0 .\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs28 \cf0 \ul \ulc0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \ulnone Creation
+\f1\b0\fs24 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs18 \cf0 \
+*
+\f0\b\fs24 new( spec, initialValue)
+\f1\b0 \
+	
+\f0\b spec
+\f1\b0  - Any object that responds to asSpec (Nil, Symbol, ControlSpec, Array)  with a 
+\f0\b ControlSpec
+\f1\b0 \
+
+\f0\b 	initialValue - 
+\f1\b0 the initialValue is constrained to lie within the range of the spec\
+		Note: some common ControlSpecs include:\
+		
+\f2\fs18  unipolar, bipolar, freq, lofreq, midfreq, widefreq, phase, rq, \
+		 audiobus, controlbus, midi, midinote, midivelocity, \
+		 db, amp, boostcut, pan, detune, rate, beats, delay 
+\f1\fs24 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs28 \cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \ulnone Setting the range of values on existing CVs\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs24 \cf0 spec_(spec, default value) \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf0 	
+\f0\b spec
+\f1\b0  - Any object that responds to asSpec (Nil, Symbol, ControlSpec, Array)  with a ControlSpec\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf0 	defaultValue 
+\f1\b0 - the initial value of the CV\
+	\
+
+\f0\b sp( val, min, max, step, warp)	\
+	val 		
+\f1\b0 inital value\
+	
+\f0\b min 
+\f1\b0  		smallest possible value\
+	\
+	
+\f0\b max 		
+\f1\b0 largest possible value\
+	
+\f0\b step		
+\f1\b0 smallest incremental change in GUI\
+	
+\f0\b warp		
+\f1\b0 either 'linear' or 'exponential'\
+			In the case of exponential warp,\
+			 min and max must be non-zero and the same sign.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2 \cf0 Examples:\
+	a = CV(\\freq, 480);\
+	b = CV.new.spec_(\\bipolar, -1);\
+	c = CV.new.sp(0, 0 , 100);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs28 \cf0 \
+Accessing 
+\f1\b0\fs24 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 	
+\f0\b\fs28 \ul \
+
+\fs24 \ulnone value
+\f1\b0 \
+	Answer the current value of the control. This is how the control is read within tasks and patterns\
+\
+
+\f0\b input 
+\f1\b0 \
+	a number ranging form 0 to 1 that corresponds to postion of  the current value between min and max\
+	\
+
+\f0\b input_ (inputValue)
+\f1\b0 \
+	an inputValue ranging form 0 to 1 results in this.value ranging from min to max.  \
+	This method is typically used by external controls (such as MIDI) and GUI views to alter the CV.\
+\
+
+\f0\b value_ (newValue)
+\f1\b0 \
+	Set the current value of the control, irrespective of the range settings.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs28 \cf0 \
+CV connections using SimpleControllers\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf0 \ulnone 	When a CV's value is changed a 
+\f0\b changed 
+\f1\b0 message (with 
+\f0\b 'synch' 
+\f1\b0 as the identifier) is send to update\
+	any dependant objects.  For example, 
+\f0\b action_(function)
+\f1\b0  creates a SimpleController which is added to\
+	the dependants of the CV and evaluated whenever the CV changes value.  This same basic mechanism \
+	is used to connect the CV to GUI's, server, objects, and some other objects in the language. Most of\
+	this is more or less hidden from view.\
+\
+	Under normal circumstances, CV connections are automatically removed when the targeted Control, \
+	Bus, or View is deleted.  If there is a program error, it is possible that connections will persist and will \
+	need to be explicitly removed.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs28 \cf0 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs24 \cf0 \ulnone action_ (function)
+\f1\b0 \
+	Create a dependant SimpleController that evaluates the function whenever the CV's value is altered.
+\f0\b\fs28 \ul \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \ulnone \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs24 \cf0 release	\
+	
+\f1\b0 Remove all dependants. (This is actually a method of Object..)\
+	
+\f0\b\fs28 \
+GUI connections\
+	
+\f1\b0\fs24 \
+	The following methods establish connections Views and CVs.\
+	
+\f0\b\fs30 \
+
+\fs24 	SCSlider
+\f1\b0 -connect(aCV)
+\f0\b \
+	SCNumberBox
+\f1\b0 -connect(aCV)\
+
+\f0\b 	SC2DSlider
+\f1\b0 -connect([xCV, yCV])
+\f0\b \
+	SCRangeSlider
+\f1\b0 -connect([loCV, hiCV])
+\f0\b \
+
+\f2\b0\fs18 \
+
+\f0\b\fs24 	SCMultiSliderView
+\f1\b0 -connect(aCV)	// for CVs with multiple values\
+
+\f2\fs18 \
+
+\f0\b\fs24 	SCPopupMenu
+\f1\b0 -connect(aCV)	// for SVs, displays SV-items\
+
+\f0\b 	SCListView
+\f1\b0 -connect(aCV)	// for SVs\
+
+\f2\fs18 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 	One CV can be connected to many views but each view is connected to only one CV.\
+	When a CV's value changes, it is relayed to all of its dependants including the source of the \
+	the change.  That way, the GUI accurately reflects the new value of the CV.  See the behavior\
+	of 'b' in the following example.	\
+	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f3\i\fs28 \cf0 	The following example provides a generic graphic interface to two CVs.  \
+Subsequent examples depend on that window, so leave it open until you are finished \
+working through the help file.  (The interpreter variables 'a' and 'b' contain the CVs\
+used by the examples, so they should be left unaltered.)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\i0\b\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0 \cf0 \
+		(\
+		a = \cf2 CV\cf0 (\cf3 \\freq\cf0 );					\cf4 // create a couple of CVs\cf0 \
+		b = \cf2 CV\cf0 .new.sp(-10,-100,20, 10);\
+		\
+		w = \cf2 SCWindow\cf0 (\cf5 "CV Demo"\cf0 , \cf2 Rect\cf0 (64, 0, 400, 300)).front;				\cf4 // make a window\cf0 \
+		w.view.decorator = \cf2 FlowLayout\cf0 (w.view.bounds);\
+
+\f0\b\fs24 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 //		
+\f1\b0 CVs can be connected to SCSlider and SCNumberBox.\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 		z = \cf2 SCNumberBox\cf0 (w, \cf2 Rect\cf0 (0, 0, 50, 20)).connect(a,w);\
+		y = \cf2 SCSlider\cf0 (w, \cf2 Rect\cf0 (50, 0, 150, 20)).connect(a,w);\
+		w.view.decorator.nextLine;\
+\
+		\cf2 SCNumberBox\cf0 (w, \cf2 Rect\cf0 (0, 0, 50, 20)).connect(b,w);\
+		\cf2 SCSlider\cf0 (w, \cf2 Rect\cf0 (50, 0, 150, 20)).connect(b,w);\
+		w.view.decorator.nextLine;\
+
+\f0\b\fs24 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 //		
+\f1\b0 Pairs of CVs can be connected to SCRangeSlider, SC2DSlider .\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 		\cf2 SCRangeSlider\cf0 (w, \cf2 Rect\cf0 (0, 0, 200, 20)).connect([a,b],w);\
+		w.view.decorator.nextLine;\
+\
+		\cf2 SC2DSlider\cf0 (w, \cf2 Rect\cf0 (00, 0, 200, 200)).connect([a,b],w);\
+		)\
+
+\f0\b\fs24 		
+\f1\b0 		
+\f0\b \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs28 \cf0 Server connections\
+\
+
+\f1\b0\fs24 	 OSC commands (i.e.,  
+\f0\b /n_set,
+\f1\b0   
+\f0\b /s_new) 
+\f1\b0 specify
+\f0\b  
+\f1\b0 initial values of parameters as a flat array of pairs\
+	 consisting of a  name and its initial value:\
+\
+				
+\f2\fs18 [frequency: 440, amplitude: 1, ...]\
+
+\f1\fs24 \
+	"Extended argument arrays" allow CVs to be used in place of the initial value. This is the standard\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf0 	
+\f1\b0 syntax for establishing connections between CVs and a server. In an extended argument array,\
+	the CV's value can be altered before being sent, multiple CV's can determine the value to be sent,\
+	and the value to be sent can be determined by a function:		\
+			value 	 		[freq:		 440  ]\
+			CV				[freq: 	aCV  ]\
+			altered CV		[freq: 	[ aCV, aCV.midicps ] ]\
+			combination		[freq:		[ [aCV, bCV], aCV.midicps + bCV] ]\
+			function			[freq:		[ aCV, \{ aCV.midicps.value + 33.rand \}]\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs28 \cf0 \
+
+\f1\b0\fs24 	For example, the method 
+\f0\b Synth-controls
+\f1\b0  is identical to 
+\f0\b Synth-new
+\f1\b0  except the args parameter is\
+	extended:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf0 	\
+	Synth-controls(defName, extendedArgArray, target, addAction) \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0 \cf0 \
+	( \cf4 // basic CV connection\cf0 \
+		\cf2 Synth\cf0 .controls(\cf5 "default"\cf0 , [\
+			freq: a\
+		]);\
+	)\
+	\
+	( \cf4 // modified CV connection	\cf0 \
+		\cf2 Synth\cf0 .controls(\cf5 "default"\cf0 , [\
+			amp: [b, b.dbamp],\
+			freq: a\
+		]);\
+	)\
+	(\cf4 // multiple modified connection\cf0 \
+		\cf2 Synth\cf0 .controls(\cf5 "default"\cf0 , [\
+			freq: [\
+				[a,b], a + b,\
+			], \
+			amp: [\
+				[a,b], (a.cpsmidi.neg/4 + b).dbamp \
+			]\
+		]);\
+	)\
+	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1 \cf0 	In the previous two examples, the modifyin expression is actually a combination of Streams altered \
+	with binary and unary operators.  This is concise, but in some cases, it may be necessary\
+	to use a Function to define the modification. Notice that within a Function definition it is necessary \
+	to explicitly extract the value of the CV using a 
+\f0\b value
+\f1\b0  message. \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2 \cf0 	(\cf4 // a Function modifying the CV connection\cf0 \
+		\cf2 Synth\cf0 .controls(\cf5 "default"\cf0 , [\
+		\
+			freq: [b, \{ \cf2 var\cf0  index; (index = b.value + 100 /12 ).asInteger;\
+				[100,200,300,400,500, 600].mirror.at(index)\
+			\}],\
+			amp: [\
+				[a,b], \{(a.value.cpsmidi.neg/4 + b.value).dbamp  \}\
+			]\
+		]);\
+	)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1 \cf0 \
+
+\f0\b\fs28 	 Summary of Node related connection methods\
+	\
+	Array
+\fs26 \
+		connectToNode(server,nodeID)\
+		connectToNodeProxy(server,nodeID)\
+			
+\f1\b0 the receiver is a flat Array of name/value pairs
+\f0\b \
+		connectToBuffer(server,bufnum)\
+		connectToBus(server, index)\
+			
+\f1\b0 the receiver is an Array of CVs.\
+			
+\f0\b \
+	Node\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs24 \cf0 		setControls(extendedArgArray)\
+			\
+	NodeProxy\
+		setControls(extendedArgArray) - connects CVs to the named controls\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs26 \cf0 	
+\f2\b0\fs18 	(\
+		c = CV.new.sp(-20, -100, 120);\
+		p = NodeProxy.audio(s, 2);\
+		p.play; //play to hardware output, return a group with synths\
+		p.setControls([f: a, c: [b, \{ \\freq.asSpec.map(b.input)\}] ]);\
+		b.input_(0.5);\
+		p.source = \{ arg f=400, c = 400; PMOsc.ar(f , c, 4, 0, 0.1) \}; \
+		)\
+		\
+
+\f0\b\fs26 	Synth\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs24 \cf0 		*controls(synthDef, extendedArgArray, target, addAction)
+\fs26 			
+\f1\b0 Thihe same as *new, but allows CV's to be used in the args array.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf0 	Bus\
+		*controls(arrayOfCVs,server)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0\fs18 \cf0 		(\
+			c = \{ \cf2 arg\cf0  f = 400,  a = -20, pan = 0; \cf2 Pan2\cf0 .ar(\cf2 SinOsc\cf0 .ar(f, 0, a.dbamp), pan) \}.play;\
+			d = \cf2 Bus\cf0 .controls([a,b],s); \
+			[a,b].connectToBus(d.server, d.index);\
+			\cf2 Routine\cf0 (\{						\cf4 // need to make sure the synth has been created...\cf0 \
+				s.sync;\
+				c.map(\cf3 \\f\cf0 ,d.index,\cf3 \\a\cf0 ,d.index + 1);\
+			\}).play;\
+		)\
+
+\f0\b\fs24 		setControls(arrayOfCVS) - connects CVs to consecutive buses\
+
+\f2\b0\fs18 		(	\
+			c = \{ \cf2 arg\cf0  f = 400,  a = -20, pan = 0; \cf2 Pan2\cf0 .ar(\cf2 SinOsc\cf0 .ar(f, 0, a.dbamp), pan) \}.play;\
+			d = \cf2 Bus\cf0 .control(s,3); \
+			d.setControls([a,b]);\
+			[a,b].connectToBus(d.server, d.index);\
+			\cf2 Routine\cf0 (\{						\cf4 // need to make sure the synth has been created...\cf0 \
+				s.sync;\
+				c.map(\cf3 \\f\cf0 ,d.index,\cf3 \\a\cf0 ,d.index + 1);\
+			\}).play;\
+		)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs26 \cf0 	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs28 \cf0 Reading and writing CVs in functions and patterns\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs24 \cf0 	Tasks\
+	
+\f1\b0 Within a function, CVs are accessed using 
+\f0\b value 
+\f1\b0 and 
+\f0\b input 
+\f1\b0 and  altered using 
+\f0\b value_ 
+\f1\b0 and 
+\f0\b input_
+\f1\b0 . \
+
+\f0\b 	\
+	(\
+
+\f2\b0\fs18 		\cf2 Task\cf0 (\{\
+			10.do(\{ \
+				a.input.post; \cf5 " "\cf0 .post;		\cf4 // print the value scaled to the range [0,1]\cf0 \
+				a.value.postln; 			\cf4 // print the actual value\cf0 \
+				a.input_(1.0.rand); 		\cf4 // select a new value at random\cf0 \
+										\cf4 // the weighting of values will conform to the warp\cf0 \
+										\cf4 // with \\exp, values fall uniformly in each octave\cf0 \
+				wait(0.1);\
+			\})\
+		\}).play(\cf2 AppClock\cf0 )
+\f0\b\fs24 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf0 	)\
+	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf0 	Patterns\
+		
+\f1\b0 Within a pattern definition, a CV can directly substitute for a Pattern:
+\f0\b \
+
+\f2\b0\fs18 		(\
+		\cf2 SynthDescLib\cf0 .global.read;\
+		\cf2 Pbind\cf0 (	\cf3 \\instrument\cf0 ,	\cf3 \\default\cf0 , \
+				\cf3 \\freq\cf0 , a,		\
+				\cf3 \\db\cf0 , b,\
+				\cf3 \\dur\cf0 , 0.2\
+		).play(quant: 0);\
+		)
+\fs24 \
+
+\f0\b 		
+\f1\b0 \cf2 Pfunc\cf0  can be used to change the \cf2 CV\cf0  from within a \cf2 Pattern\cf0 .\
+
+\f2\fs18 		(\
+		\cf2 SynthDescLib\cf0 .global.read;\
+		\cf2 Pbind\cf0 (	\cf3 \\instrument\cf0 ,	\cf3 \\default\cf0 , \
+				\cf3 \\freq\cf0 , \cf2 Pwhite\cf0 (100, 1000).round(100),	\
+				\cf3 \\placeholder\cf0 , \cf2 Pfunc\cf0 (\{ \cf2 arg\cf0  ev; a.value_(ev.at(\cf3 \\freq\cf0 )) \}),\
+				\cf3 \\db\cf0 , b,\
+				\cf3 \\dur\cf0 , 0.2\
+		).play;\
+		)
+\fs24 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs28 \cf0 \
+CVs and external input\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs24 \cf0 \
+		The input_(in) method makes it easy to connect a CV to any control source:\
+
+\f2\b0\fs18 		\
+		( \cf4 // MIDI\cf0 \
+		\cf2 MIDIClient\cf0 .init;\
+		\cf2 MIDIIn\cf0 .connect(0,0);\
+		\cf2 MIDIIn\cf0 .control = \{ \cf2 arg\cf0  src, chan, num, val;			a.input_(val/127)\
+		\}\
+		)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 		The methods 
+\f0\b input 
+\f1\b0 and 
+\f0\b input_
+\f1\b0  are also used by ConductorPreset to allow interpolations\
+		between settings that follow warp of the CV's ControlSpec.\
+}

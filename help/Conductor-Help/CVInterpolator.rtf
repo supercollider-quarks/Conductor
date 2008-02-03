@@ -1,0 +1,61 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf380
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red7\green7\blue7;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs32 \cf2 CVInterpolator \
+	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf2 	 
+\f0\b base class: CVPreset\
+	related classes: CVinterpolator, CV, Conductor, ConductorGUI\
+
+\f1\b0 \
+
+\f0\b 	
+\f1\b0 CVPreset saves 'presets' for an array of CVs or other objects that respond to 
+\f0\b input 
+\f1\b0 and 
+\f0\b input_
+\f1\b0 \
+	
+\f0\b \
+	Instance Variables\
+		interpIndices		
+\f1\b0 indices of items to be interpolated (used to look up presets)
+\f0\b \
+		interpItems		
+\f1\b0 items to be interpolated\
+
+\f0\b 		base			
+\f1\b0 settings of the 
+\f0\b interpItems
+\f1\b0  when a new target was selected\
+		
+\f0\b target			
+\f1\b0 settings of items towards which interpolation converges\
+		\
+		
+\f0\b targetCV			
+\f1\b0 CV used to choose the target of interpolation
+\f0\b \
+		interpolationCV	
+\f1\b0 CV used to control the degree of interpolation, ranges from 0 to 1
+\f0\b \
+		\
+	Instance Methods\
+	\
+		note: 
+\f1\b0 Changing interpolation targets and degree of interpolation is all done\
+		by changing the values of targetCV and interpolationCV.\
+
+\f0\b \
+		interpItems_(argItems) 	
+\f1\b0 argItems is a subset of 
+\f0\b items\
+\
+
+\f1\b0 		
+\f0\b \
+}

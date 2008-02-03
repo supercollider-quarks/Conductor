@@ -1,0 +1,174 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf380
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red7\green7\blue7;\red10\green1\blue17;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs32 \cf2 ConductorPlayer\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf2 	 	
+\f0\b \
+	related classes: Conductor, CVEvent\
+	player classes: ActionPlayer, PatternPlayer, TaskPlayer, NodeProxyPlayer 
+\f1\b0 \
+	see also: 
+\f0\b NodeEvent
+\f1\b0 \
+
+\f0\b 	
+\f1\b0 ConductorPlayer provides unified control for any collection of 'players', which are objects that \
+respond to
+\f0\b  
+\f1\b0 stop/play/pause/resume.  The player classes listed above adapt standard classes to this \
+interface.\
+\
+	Groups, synths, control buses, and buffers can be controlled with Events.\
+\
+	The instance variable server can contain either a single Server or an array of Servers.  \
+ConductorPlayer bundles all of the OSC commands generated in response to stop/play/pause/resume \
+for the servers in that variable.\
+	
+\f0\b \
+	Instance Variables\
+		conductor	
+\f1\b0 the Conductor that is the context for its players
+\f0\b \
+		name		
+\f1\b0 the name is used in GUI display
+\f0\b \
+		server		
+\f1\b0 A server or array of servers, all of the OSC commands generated in response to \
+					stop/play/pause/resume are bundled for the server(s).
+\f0\b \
+		players		
+\f1\b0 the players controlled by the ConductorPlayer
+\f0\b \
+	\
+	Instance Methods\
+	\
+		play			\
+		stop\
+		pause\
+		resume\
+\
+		add (player)	
+\f1\b0 A player is an object that respods to stop, play, pause, resume
+\f0\b \
+		remove(player)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 		action_		(playFunc, stopFunc, pauseFunc, resumeFunc)\
+			
+\f1\b0 Adds an 
+\f0\b ActionPlayer
+\f1\b0  which responds to play, stop, pause, and resume by evaluating \
+			the corresponding function with the Conductor as currentEnvironment.
+\f0\b \
+		task_		(function, clock, quant)\
+			
+\f1\b0 Adds a 
+\f0\b TaskPlayer
+\f1\b0  which plays the function within a task scheduled by the specified clock \
+			and quantization. (On stop, tasks that block on a message port are also be deleted.)
+\f0\b \
+		pattern_		(pattern, clock, event, quant)\
+			
+\f1\b0 Adds a 
+\f0\b PatternPlayer
+\f1\b0  which plays the pattern with the specified event, clock and quantization.\
+		
+\f0\b group_		( event, args)\
+			
+\f1\b0 The event is assigned CVEvent-groupEvent as its parent.
+\f0\b \
+
+\f1\b0 		
+\f0\b synth_		( event, args)\
+			
+\f1\b0 The event is assigned CVEvent-synthEvent as its parent.
+\f0\b \
+		\
+		
+\f1\b0 The argument 
+\f0\b args
+\f1\b0  is an interleaved array of keys and CVs (or value). \
+		CVs can also be altered  before being sent to the server and combinations of CVs can\
+		determine the value to be sent:\
+		\
+			value 	 		[freq:		 440  ]\
+			CV				[freq: 	aCV  ]\
+			altered CV		[freq: 	[ aCV, aCV.midicps ] ]\
+			combination		[freq:		[ [aCV, bCV], aCV.midicps + bCV] ]\
+			function			[freq:		[ aCV, \{ aCV.midicps.value + 33.rand \}]\
+
+\f0\b \
+		
+\f1\b0 The events use the same keys as note events in patterns. The keys 
+\f0\b server
+\f1\b0 , 
+\f0\b group
+\f1\b0 , and \
+		
+\f0\b addAction
+\f1\b0  and, for synths, 
+\f0\b instrument
+\f1\b0  determine the group or synth. As in patterns, the\
+		 default values for these keys are \
+		 	server: 		Server.default, \
+		 	group: 		1,\
+		 	addAction:	0, \
+		 	instrument:	 'default' \
+\
+		Usually the node ID of the group or synth is dynamically allocated, but the key id can be set \
+		to set the id directly.  For group events, a new group  or collection of groups is created with the\
+		specified id(s).  For synth events, no synths are created, but the control values determined by \
+		the event are sent to the specified id(s).\
+		\
+		
+\f0\b controlBus_	( event, cvs)\
+			
+\f1\b0 The event can specify\
+			server:	aServer (defaults to Server.default)\
+			index: 	(optional)\
+
+\f0\b 			
+\f1\b0 CVs is an array of CVs that are used to determine the value of consecutive buses
+\f0\b \
+	\
+
+\f1\b0 		
+\f0\b buffer_		( event)\
+			
+\f1\b0 This event is designed primarily for small waveform buffers, it specifies:\
+			server:	aServer (defaults to Server.default)\
+			cv:		a CV that determines the values in the buffer\
+			msg:		A symbol that determines how the values are used to fill the buffer.\
+					Is is one of: \\
+\f0\b sine1
+\f1\b0 , \\
+\f0\b cheby
+\f1\b0 , \\
+\f0\b wave
+\f1\b0 , or \\
+\f0\b signa
+\f1\b0 \
+			display:	anotherCV\
+				An optional CV used to display the contents of the buffer (as received from the server)			size:		integer (defaults to 512 and should not exceed 1024).\
+
+\f0\b 	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 		\
+		\
+		makeBundles (function)\
+			
+\f1\b0 This is called by play,stop, pause and resume to bundle all of OSC commands sent to\
+		any of the Servers listed in the instance variable 
+\f0\b server
+\f1\b0 .
+\f0\b \
+\
+		draw (window, name)\
+			
+\f1\b0 Draws the ConductorPlayer in a ConductorGUI.\
+			
+\f0\b \
+}

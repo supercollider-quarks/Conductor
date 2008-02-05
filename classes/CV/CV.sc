@@ -59,5 +59,9 @@ CV : Stream {
 		} {
 			~cvGUI.value(win, name, this);
 		}
+	}
+	
+	connect { | view |
+		view.class.asSymbol.postln;
 	}		
 }

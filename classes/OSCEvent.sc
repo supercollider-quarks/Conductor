@@ -1,4 +1,3 @@
-
 OSCEvent {
 	var <>addr, <>cmdName, <>thread, <>time, <>msg, <>respAddr, dispatcher;
 

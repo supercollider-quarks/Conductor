@@ -30,7 +30,7 @@ OSCEvent {
 		dispatcher = nil;
 	}
 	
-	value { | argTime, node, argMsg, argAddr |
+	value { | argTime, argMsg, argAddr |
 		time = argTime; msg = argMsg; respAddr = argAddr;
 		if (thread.next(this).isNil) { this.remove};
 	}

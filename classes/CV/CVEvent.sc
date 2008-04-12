@@ -23,6 +23,7 @@ CVEvent {
 
 			play: {
 				var ev;
+				~finish.value;
 				ev = currentEnvironment;
 				~server = ~server ?? {Server.default};
 				~buffer = Buffer.alloc(~server, ~size, 1);
@@ -66,6 +67,7 @@ CVEvent {
 				var instrumentName, synthLib, desc, msgFunc;
 				var msgs, cvs;
 				var bndl, ids;
+				~finish.value;
 				~server = server = ~server ?? { Server.default };
 				group = ~group;
 				addAction = ~addAction;
@@ -106,6 +108,7 @@ CVEvent {
 			lag: 0,
 			play: #{
 				var server, group, addAction, ids, bundle, cvs;
+				~finish.value;
 				group = ~group;
 				addAction = ~addAction;
 				~server = server= ~server ?? {Server.default};
@@ -130,6 +133,7 @@ CVEvent {
 		CVEvent.controlBusEvent = (
 			play: #{ var cvs, index, server, bundle, size;
 				~server = server = ~server ?? {Server.default};
+				~finish.value;
 				cvs = ~cvs.asArray;
 				index = ~index;
 				if (index.isNil) {

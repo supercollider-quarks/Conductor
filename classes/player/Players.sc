@@ -1,19 +1,19 @@
 NodeProxyPlayer {
-	var <>nodeProxy, <>args, <>bus, <>numChannels, <>group;
-	*new { | nodeProxy, args = #[], bus = 0, numChannels = 1, group = 1 | 
-		^super.newCopyArgs (nodeProxy, args, bus, group)
+	var <>nodeProxy, <>args, <>bus, <>numChannels, <>group, <>multi;
+	*new { | nodeProxy, args = #[], bus, numChannels, group, multi = false | 
+		^super.newCopyArgs (nodeProxy, args, bus, numChannels, group, multi)
 	}
 
 	play { 
 		nodeProxy.awake = true; 
-		nodeProxy.play(bus, numChannels, group.asGroup, false); 
-		nodeProxy.setControls(args.value);
+		nodeProxy.play(bus, numChannels ? nodeProxy.numChannels, group ? nodeProxy.group, multi); 
+		if (args.notNil) { nodeProxy.setControls(args.value) };
 	}
 	stop { 
 		Task{ 
 			nodeProxy.stop(nodeProxy.fadeTime); 
 			nodeProxy.fadeTime.wait; 
-			nodeProxy.clear
+//			nodeProxy.clear
 		}.play;	
 	}
 	pause { nodeProxy.group.run(false)  }

@@ -62,6 +62,7 @@ Conductor : Environment {
 	init {
 		gui = ConductorGUI(this, #[ ]);
 		this[\player] = player = ConductorPlayer(this);
+		this.noSettings;
 	}
 			
 	make { arg func; 
@@ -153,11 +154,11 @@ Conductor : Environment {
 	}
 
 // gui display of file saving
-	noSettings { this[\settings] = nil; this[\preset] = nil; }
+	noSettings { this[\settings] = nil; this[\preset] = NullPreset; }
 	
 	useSettings { 
 		this[\settings] = ConductorSettingsGUI(this);
-		this[\preset] = nil;
+		this[\preset] = NullPreset;
 	}
 	
 	usePresets { 
@@ -285,5 +286,85 @@ Conductor : Environment {
 		this.add(NodeProxyPlayer(nodeProxy, args, bus, numChannels, group, multi) )
 	}
 
-		
+	useMIDI { 
+		var conductor = this;
+		if (conductor.valueKeys.includes(\mappings).not) {
+			conductor.valueKeys = conductor.valueKeys ++ \mappings;
+			conductor[\mappings] = Ref( () );
+		};
+		conductor.gui.guis.put('map MIDI', 
+			 { |win, name, interp|
+			 	var w;
+				~simpleButton.value(win, Rect(0,0,60, 20))
+					.states_([["map MIDI", Color.black, Color.hsv(0, 0.5,1)]])
+					.action_({ var cond;
+						MIDIClient.connectAll;
+						if (w.isNil) {
+						cond = Conductor.make({ | con |
+							var keys, ccAssigns, kdAssigns;
+							con.gui.header = [];
+							~ccAssigns = ccAssigns = ();
+							con.noSettings;
+							con.name_("MIDI mapper");
+							keys = conductor.gui.keys.select{ | k | conductor[k].class === CV };
+							
+							keys.do({ | k | con.addCV(k) });
+							keys.do({ | k | con[k].sp(0,0,2,1) });
+							con.gui.use {
+								~cvGUI = ~radiobuttons
+							};
+							
+							
+							con.task_( { var ev, packet, activeKeys;
+									loop {
+									ev = MIDIIn.waitControl;
+									packet = ev.chan * 128 + ev.b;
+									activeKeys = keys.select { | k | con[k].value == 1 };
+									if (activeKeys.size > 0) {
+										conductor[\mappings].value.put(packet, activeKeys.copy);
+									defer {
+										activeKeys.do { | k | con[k].value = 2 }
+									}
+								}
+							};
+						
+							
+							})
+						});
+						w = cond.show("MIDImap", win.bounds.left + win.bounds.width, win.bounds.top, 200, 300);
+						cond.play;
+						defer ({ w.bounds = w.bounds.resizeBy(50, 0)}, 0.02) ;
+						topEnvironment[\w] = w;
+					} {
+						w.close; w = nil;
+					};
+				});
+			}		
+		);
+		conductor.gui.guis.put(\midi, 
+		 { |win, name, interp|
+		 	var routine;
+			~simpleButton.value(win, Rect(0,0,60, 20))
+				.states_([["midi", Color.black, Color.hsv(0, 0.7,1)], ["midi", Color.red, Color.black] ])
+				.action_({ |bt |
+					if (bt.value == 0) {
+						routine.stop; routine.originalStream.stop; routine = nil;
+					} {
+						MIDIClient.connectAll;
+						routine = Task { var ev,keys;
+							loop {
+								ev = MIDIIn.waitControl;
+								if ( (keys = conductor[\mappings].value[ev.chan * 128 + ev.b]).notNil) {
+									keys.do { | key |
+										conductor[key].input_(ev.c/127);
+									}
+								}	
+							}
+						}.play;
+					}
+				});
+			});			
+
+		conductor.gui.header = [ conductor.gui.header[0] ++ \midi ++ 'map MIDI'];
+	}	
 }

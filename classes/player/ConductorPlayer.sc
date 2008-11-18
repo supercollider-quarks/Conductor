@@ -22,10 +22,12 @@ ConductorPlayer {
 	}
 		
 	stop {
-		this.makeBundles({ conductor.use{ players.do(_.stop) } });
-		currentState = 0; 
-		CmdPeriod.remove(this); 
-		this.changed(\synch, 0);
+		if (currentState != 0) { 
+			this.makeBundles({ conductor.use{ players.do(_.stop) } });
+			currentState = 0; 
+			CmdPeriod.remove(this); 
+			this.changed(\synch, 0);
+		}
 	}
 	
 	play { 

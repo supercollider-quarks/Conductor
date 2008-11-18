@@ -351,7 +351,7 @@ Conductor : Environment {
 				~simpleButton.value(win, Rect(0,0,60, 20))
 					.states_([["map MIDI", Color.black, Color.hsv(0, 0.5,1)]])
 					.action_({ var cond;
-						MIDIClient.connectAll;
+						MIDIIn.connectAll;
 						if (w.isNil) {
 						cond = Conductor.make({ | con |
 							var keys, ccAssigns, kdAssigns;
@@ -403,7 +403,7 @@ Conductor : Environment {
 					if (bt.value == 0) {
 						routine.stop; routine.originalStream.stop; routine = nil;
 					} {
-						MIDIClient.connectAll;
+						MIDIIn.connectAll;
 						routine = Task { var ev,keys;
 							loop {
 								ev = MIDIIn.waitControl;

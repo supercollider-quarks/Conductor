@@ -176,4 +176,44 @@ ConductorGUI : GUIEvent {
 		};
 	}
 	
+	
+	addKeys { | newKeys |
+		var v;
+		keys = keys ++ newKeys;
+		if (this[\win].notNil) {
+			this.use {		
+				newKeys.collect { | key |
+					key.postln;
+					v = conductor[key].draw (~win, key);
+					if(~noCR.isNil) { ~nextLine.value(~win) };
+					~views = ~views.add(v);
+				};
+			};
+		}
+	}
+	
+	resizeToFit {
+		var rect;
+		this.use {
+			~resizeWindowToContents.value(~win);
+			~win.resizeToFit;
+			rect = ~win.bounds.moveTo(*(~win.parent.bounds.leftTop.asArray) );
+			~win.parent.bounds = rect;
+		}
+	}
+	
+		
+	resize { | pt |
+		var win;
+		win = this[\win];
+		if (win.notNil) { 
+			if (pt.isNil) {
+				this.use {~resizeWindowToContents.value(win) };
+			} {
+				win.bounds = win.bounds.extent.resizeTo(pt.x, pt.y)
+			}
+		}
+	}
+
+
 }

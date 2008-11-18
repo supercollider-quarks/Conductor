@@ -42,6 +42,7 @@ Conductor : Environment {
 			\rate -> ControlSpec(0.125, 8, \exp, 0, 1),
 			\beats -> ControlSpec(0, 20, units: " Hz"),
 			\ratio -> ControlSpec(1/64, 64, \exp, 0, 1),
+			\dur -> ControlSpec(0.01, 10, \exp, 0, 0.25),
 			
 			\delay -> ControlSpec(0.0001, 1, \exp, 0, 0.3, units: " secs"),
 			\longdelay -> ControlSpec(0.001, 10, \exp, 0, 0.3, units: " secs"),
@@ -50,6 +51,20 @@ Conductor : Environment {
 			
 		].do { | assoc | specs.add(assoc) };
 	 }
+	}
+	
+	*postSpecs {
+		var sp;
+		specs.keys.asSortedList.do { | key |
+			sp = Conductor.specs[key];
+			if (sp.class == ControlSpec) { 
+				key.postL(15);
+				sp.default.postL;
+				sp.minval.postL;
+				sp.maxval.postL;
+				sp.warp.class.postLn(25);
+			}
+		}
 	}
 	*make { arg func; 
 		var obj, args, names;
@@ -282,9 +297,47 @@ Conductor : Environment {
 	}
 
 		
-	nodeProxy_ { | nodeProxy, args, bus, numChannels, group, multi |
+
+
+//	nodeProxy_ { | nodeProxy, args, bus, group |
+//		this.add(NodeProxyPlayer(nodeProxy, args, bus, group) )
+//	}
+//	
+	addCon { | name, func|
+		var con;
+		name = name.asSymbol;
+		con = Conductor.new;
+		con.name_(name);
+		this.put(name, con.make(func) );
+		gui.addKeys( [name] );
+	}
+	
+	addCV { | name, val |
+		var cv, v;
+		cv = Conductor.makeCV(name, val);
+		this.put(name, cv);
+		if (preset.notNil) { preset.items = preset.items.add(cv) };
+		gui.addKeys( [name] );
+		^cv;
+						
+	}
+
+	updateNPCV {| nodeProxy, key, value |
+		var cv;
+		
+		if ( (cv = this[key]).notNil) { 
+			if (value.notNil) { cv.value_(value) }
+		} {
+			cv = this.addCV(key, value);
+			cv.action_({ nodeProxy.prset(key, cv.value) });
+			nodeProxy.prset(key, cv.value);
+		}		
+	}
+
+	nodeProxy_ { | nodeProxy, args, bus, numChannels, group, multi = false |
 		this.add(NodeProxyPlayer(nodeProxy, args, bus, numChannels, group, multi) )
 	}
+
 
 	useMIDI { 
 		var conductor = this;

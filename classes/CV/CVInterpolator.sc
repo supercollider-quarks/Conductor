@@ -40,12 +40,14 @@ CVInterpolator : CVPreset {
 	
 	setTarget { arg index;
 		var goal, start;
-		goal = presets[index];
-		goal = interpIndices.collect { | i| goal[i] };
-		start = interpItems.collect { | cv| cv.input };
-		base = 2 * start - goal;
-		target = goal - start;
-		interpCV.value_(0); 
+		if (index.notNil) { 
+			goal = presets.clipAt(index);
+			goal = interpIndices.collect { | i| goal[i] };
+			start = interpItems.collect { | cv| cv.input };
+			base = 2 * start - goal;
+			target = goal - start;
+			interpCV.value_(0); 
+		}
 		
 	}
 

@@ -54,3 +54,10 @@ CVPreset {
 
 }
 
+NullPreset {
+	*value_ {}
+	*value { ^1 }
+	*input_ {}
+	*input { ^1 }
+	*draw {}
+}

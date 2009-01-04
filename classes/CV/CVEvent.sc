@@ -34,7 +34,7 @@ CVEvent {
 						if (~display.notNil) { ev.get };
 					}
 				});
-				ev[~msg].value;  
+				defer( { ev.use { ev[~msg].value; } }, 0.3); 
 				if (~display.notNil) { ~get.value(ev,0.2) };
 			},
 				
@@ -73,7 +73,8 @@ CVEvent {
 				addAction = ~addAction;
 				synthLib = ~synthLib ?? { SynthDescLib.global };
 				instrumentName = ~instrument.asSymbol;
-				desc = synthLib.synthDescs[instrumentName];					if (desc.notNil) { 
+				desc = synthLib.synthDescs[instrumentName];
+				if (desc.notNil) { 
 					msgFunc = desc.msgFunc;
 					~hasGate = desc.hasGate;
 				}{
@@ -86,14 +87,19 @@ CVEvent {
 				if (ids.isNil ) { ids = msgs.collect { server.nextNodeID } };
 				bndl = ids.collect { |id, i|
 					[\s_new, instrumentName, id, addAction, group]
-					 ++ msgs[i]
+					 ++ msgs[i].asOSCArgArray
 					 ++ cvs.connectToNode( server, id);
 				};
 			
 				if ((addAction == 0) || (addAction == 3)) {
 					bndl = bndl.reverse;
 				};
-				server.sendBundle(server.latency + ~lag, *bndl);
+				if (~lag !=0) {
+					server.sendBundle(server.latency ? 0 + ~lag, *bndl);
+				} {
+					server.sendBundle(server.latency, *bndl);
+				
+				};
 				~id = ids;
 				~isPlaying = true;	 
 				~isRunning = true;	 

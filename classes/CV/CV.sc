@@ -11,7 +11,13 @@
 */
 
 CV : Stream {
+	classvar <>viewDictionary;
+	
 	var <value, <spec;
+	
+	*initClass { 
+		StartUp.add ({ CV.buildViewDictionary }) 
+	}
 	
 	*new { | spec = \unipolar, default | 			
 		^super.new.spec_(spec,default);
@@ -22,7 +28,7 @@ CV : Stream {
 // reading and writing the CV
 	value_ { | val |	
 		value = spec.constrain(val);
-		this.changed(\synch);
+		this.changed(\synch, this);
 	}	
 	input_	{ | in | this.value_(spec.map(in)); }
 	input 	{ ^spec.unmap(value) }
@@ -61,7 +67,34 @@ CV : Stream {
 		}
 	}
 	
+	*buildViewDictionary {
+		var connectDictionary = (
+			numberBox:		CVSyncValue,
+			slider:			CVSync,
+			rangeSlider:		CVSyncProps(#[lo, hi]),
+			slider2D:			CVSyncProps(#[x, y]),
+			multiSliderView:	CVSyncMulti,
+			popUpMenu:		SVSync,
+			listView:			SVSync,
+			tabletSlider2D:	CVSyncProps(#[x, y]),
+			ezSlider:			CVSyncValue,
+			ezNumber:			CVSyncValue
+		);
+		CV.viewDictionary = IdentityDictionary.new;
+		
+		GUI.schemes.do { | gui|		
+			var class;	
+			#[ 
+			numberBox, slider, rangeSlider, slider2D, multiSliderView, 
+			popUpMenu, listView, 
+			tabletSlider2D, ezSlider, ezNumber].collect { | name |
+				if ( (class = gui.perform(name)).notNil) {
+					CV.viewDictionary.put(class, connectDictionary.at(name))
+				}
+			}
+		};
+	}	
 	connect { | view |
-		view.class.asSymbol.postln;
+		CV.viewDictionary[view.class].new(this, view) ;
 	}		
 }

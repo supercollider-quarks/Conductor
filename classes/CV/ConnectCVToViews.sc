@@ -1,4 +1,3 @@
-<<<<<<< .mine
 
 CVSync {
 	classvar <>all;
@@ -99,8 +98,7 @@ CVSyncProperty : CVSync {
 
 }
 
-=======
->>>>>>> .r774
+
 CVSyncProperties : CVSync {
 	var <>links, <>view;
 	
@@ -120,7 +118,6 @@ CVSyncProperties : CVSync {
 	remove { links.do(_.remove) }
 
 }
-<<<<<<< .mine
 
 CVSyncProps {
 	var <>props;
@@ -222,5 +219,5 @@ GUI.schemes.do { | gui|
 
 )
 
-*/=======
->>>>>>> .r774
+*/
+

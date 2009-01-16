@@ -122,7 +122,7 @@ CVSyncProperties : CVSync {
 CVSyncProps {
 	var <>props;
 	*new { | props | ^super.newCopyArgs(props) }
-	new { | cv, view | ^CVSyncPropoerties(cv, view, props) }
+	new { | cv, view | ^CVSyncProperties(cv, view, props) }
 }
 
 	

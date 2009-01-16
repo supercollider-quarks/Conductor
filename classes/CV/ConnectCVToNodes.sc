@@ -37,6 +37,10 @@ This is implemented with a dummy OSC message when freeing a Control Bus.
 		
 	*/
 
+	connect { | view |
+		CV.viewDictionary[view.class].new(this, view) ;
+	}		
+
 	buildCVConnections { | connectFunc, disconnectFuncBuilder |
 		var parameters, cvLinks;
 		parameters = this.copy.clump(2);

@@ -371,11 +371,10 @@ GUIEvent : Environment {
 			knob: { |win, name, cv, rect| var v, origin;
 				cv.asArray.do { |cv|
 					v = CompositeView(win, Rect(0,0,50,80));
-					origin = v.bounds.origin;
-						CVSyncInput(cv, Knob(v, Rect(5,0,40,40).moveTo(origin.x, origin.y)));
-						CVSyncValue(cv, NumberBox(v,Rect(0,0,50,20).moveTo(origin.x, origin.y + 40)));
+						CVSyncInput(cv, Knob(v, Rect(5,0,40,40)));
+						CVSyncValue(cv, NumberBox(v,Rect(0,40,50,20)));
 						
-						StaticText(v,Rect(0,0,50,20).moveTo(origin.x, origin.y + 60))
+						StaticText(v,Rect(0,60,50,20))
 							.string_(name).align_(\center).font_(Font("Futura", 10));
 				};		
 			},

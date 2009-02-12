@@ -92,7 +92,6 @@ GUIEvent : Environment {
 
 			popup: { |win, name, cv, rect |
 				rect = rect ?? ~popupRect; 
-				cv.asArray.do( PopUpMenu(win, rect).items_(cv.items.collect(_.asSymbol)).connect(_) );
 				cv.asArray.do({ | cv | 
 					SVSync(cv, PopUpMenu(win,rect))
 				});
@@ -101,7 +100,7 @@ GUIEvent : Environment {
 			list: { |win, name,  cv, rect |
 				rect = rect ?? ~listRect; 
 				cv.asArray.do({ | cv | 
-					SVSync(cv, PopUpMenu(win,rect))
+					SVSync(cv, ListView(win,rect))
 				});
 			},
 			

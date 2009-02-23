@@ -96,5 +96,8 @@ CV : Stream {
 	}	
 	connect { | view |
 		CV.viewDictionary[view.class].new(this, view) ;
-	}		
+	}	
+	
+	asControlInput { ^value.asControlInput }	
+	asOSCArgEmbeddedArray { | array| ^value.asOSCArgEmbeddedArray(array) }
 }

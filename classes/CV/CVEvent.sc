@@ -87,13 +87,14 @@ CVEvent {
 				if (ids.isNil ) { ids = msgs.collect { server.nextNodeID } };
 				bndl = ids.collect { |id, i|
 					[\s_new, instrumentName, id, addAction, group]
-					 ++ msgs[i].asOSCArgArray
+					 ++ msgs[i]
 					 ++ cvs.connectToNode( server, id);
 				};
 			
 				if ((addAction == 0) || (addAction == 3)) {
 					bndl = bndl.reverse;
 				};
+				bndl = bndl.asOSCArgBundle;
 				if (~lag !=0) {
 					server.sendBundle(server.latency ? 0 + ~lag, *bndl);
 				} {

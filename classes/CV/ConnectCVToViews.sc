@@ -140,57 +140,26 @@ SVSync : CVSyncValue {
 	}
 	
 }
-//
-//+SCSlider {
-//	connect { | cv | CVSync(cv, this) }
-//}
-//
-//+SCNumberBox {
-//	connect { | cv | CVSyncValue(cv, this) }
-//}
-//
-//+Knob {
-//	connect { | cv | CVSync(cv, this) }
-//}
-//
-//+SCRangeSlider {
-//	connect { | cvs |
-//		CVSyncProperties(cvs, this, #[lo, hi])
-//	}
-//}
-//
-//+SC2DSlider {
-//	connect { | cvs |
-//		CVSyncProperties(cvs, this, #[x, y])
-//	}
-//}
-//
-//+SCPopUpMenu {
-//	connect { | cv | SVSync(cv, this) }
-//}
-//
-//+SCListView {
-//	connect { | cv |  SVSync(cv, this) }
-//}
-//
-//+SCMultiSliderView {
-//	connect { | cv | 
-//		CVSyncMulti(cv, this) 
-////		this.thumbSize = (this.bounds.width - 16 /cv.value.size);
-////		this.xOffset = 0;
-////		this.valueThumbSize = 1;
-////		this.mouseUpAction = CVSync(cv, this);
-//	}
-//}
 
-//+EZSliderSC {
-//	onClose_ { | func |
-//		this.numberView.onClose = func
-//	}
+
+
+EVSync : CVSync {
 	
-//	connect { | cv | CVSyncValue(cv, this) }
-//}
-
+	linkToView {						
+		view.action = this;			
+		CVSync.all[view] = CVSync.all[view].add(this);
+		view.onClose = CVSync				
+	}
+		
+	update { | changer, what ...moreArgs |	// called when CV changes
+		switch( what,
+			\synch, { defer { cv.evToView(view) } }
+		); 
+	}
+	
+	value { cv.viewToEV(view) }		// called when view changes
+		
+}
 
 /*
 (

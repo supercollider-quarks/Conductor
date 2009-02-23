@@ -259,7 +259,35 @@ GUIEvent : Environment {
 					cv.value = cv.value;		// sync GUI to CV
 					buttons[0].onClose_({link.remove});
 				}				
-			}
+			},
+			
+		envGUI: { | w, name, ev, rect |
+			var b;
+			var size, slider;
+			rect = rect ??  ~msliderRect;
+			rect = rect.resizeBy(~labelW * -1,0);
+			~label.value(w, name); 
+			b = EnvelopeView(w, rect);
+				
+			b.addAction({ | v, x, y, mod...rest| 
+				if (mod.controlFlag) {
+					v.curveSegAtMouse(x,y)
+				} {
+					if (mod.optionFlag) { 
+						v.addPointAtMouse(x, y) 
+					}
+				};
+				w.refresh;
+			}, \mouseDownAction );
+			
+			b.addAction({ | v, x, y, mod...rest| 
+				if (mod.controlFlag) {
+					v.curveSegAtMouse(x,y)
+				};
+				w.refresh;
+			}, \mouseMoveAction );
+			ev.connect(b);
+		}
 			
 		);
 		

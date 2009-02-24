@@ -419,5 +419,39 @@ Conductor : Environment {
 			});			
 
 		conductor.gui.header = [ conductor.gui.header[0] ++ \midi ++ 'map MIDI'];
-	}	
+	}
+	
+	addCursor { | key |
+	
+		currentEnvironment[key] = Conductor.make { | con, cursor = \Conductor, position, lo, hi, rate, increment |
+			hi.value = 1;
+			con.noSettings;
+			rate	.sp(0.01, 0.001, 1);
+			increment	.sp(0.01, 0.0001, 1, 0, 'exp');
+			con.gui.keys = #[cursor];
+			con.gui.guis.put(\cursor, { | win |
+				var x, xw, w = CompositeView(win, Rect(0, 0, 860, 48) );
+				x = ~labelW + 4;
+				xw = ~sliderRect.value.width - ~labelW;
+				con[\but] = Button(w, Rect(0, 0, 75, 24))
+					.states_([["cursor", Color.black, Color.green(0.9, 0.2)], ["cursor",Color.black, Color.red(0.5, 0.3)]])
+					.font_(Font("Helvetica", 10));
+				ConductorSync(con[\cursor], con[\but]);		
+			
+				position.connect(Slider(w, Rect(x,  0, xw, 15)).canFocus_(false) );
+				[lo, hi].connect( RangeSlider(w, Rect(x, 17, xw, 15)).focusColor_(Color.blue(0.4, 0.4)).canFocus_(false) );
+				Button(w, Rect(0, 26, 30, 20)).states_([["incr"]]).canFocus_(false);
+			
+				increment.connect( 
+					Slider(w, Rect(x,32, xw, 15)).canFocus_(false);
+				);
+				increment.connect( NumberBox(w, Rect(31, 26, 44, 20)) );
+			});
+			cursor.task_({loop { position.value = (wrap( position + increment, lo, hi).value); rate.value.wait } });
+		};
+		currentEnvironment.gui.keys = currentEnvironment.gui.keys.add(key);
+	}
+
+
+		
 }

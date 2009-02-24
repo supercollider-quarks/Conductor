@@ -70,7 +70,7 @@ CV : Stream {
 	*buildViewDictionary {
 		var connectDictionary = (
 			numberBox:		CVSyncValue,
-			slider:			CVSync,
+			slider:			CVSyncInput,
 			rangeSlider:		CVSyncProps(#[lo, hi]),
 			slider2D:			CVSyncProps(#[x, y]),
 			multiSliderView:	CVSyncMulti,
@@ -78,7 +78,8 @@ CV : Stream {
 			listView:			SVSync,
 			tabletSlider2D:	CVSyncProps(#[x, y]),
 			ezSlider:			CVSyncValue,
-			ezNumber:			CVSyncValue
+			ezNumber:			CVSyncValue,
+			knob:			CVSyncInput
 		);
 		CV.viewDictionary = IdentityDictionary.new;
 		
@@ -87,7 +88,7 @@ CV : Stream {
 			#[ 
 			numberBox, slider, rangeSlider, slider2D, multiSliderView, 
 			popUpMenu, listView, 
-			tabletSlider2D, ezSlider, ezNumber].collect { | name |
+			tabletSlider2D, ezSlider, ezNumber, knob].collect { | name |
 				if ( (class = gui.perform(name)).notNil) {
 					CV.viewDictionary.put(class, connectDictionary.at(name))
 				}
@@ -100,4 +101,9 @@ CV : Stream {
 	
 	asControlInput { ^value.asControlInput }	
 	asOSCArgEmbeddedArray { | array| ^value.asOSCArgEmbeddedArray(array) }
+	
+	indexedBy { | key |
+		^Pfunc{ | ev | this.value.at(ev[key] ) }
+	}
+
 }

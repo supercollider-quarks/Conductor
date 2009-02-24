@@ -161,6 +161,28 @@ EVSync : CVSync {
 		
 }
 
+ConductorSync : CVSync {
+	
+	linkToCV { 
+		cv.player.addDependant(this); 		 	// when CV changes CVsync:update is called
+	}
+	
+	linkToView {						
+		view.action = this;			
+		CVSync.all[view] = CVSync.all[view].add(this);
+		view.onClose = CVSync				
+	}
+		
+	update { | changer, what ...moreArgs |	// called when CV changes
+		switch( what,
+			\synch, { defer { view.value = cv.player.value } }
+		); 
+	}
+	
+	value { |m,c,v| if (view.value == 0) { cv.stop } { cv.play } }		// called when view changes
+		
+}
+
 /*
 (
 ~connectDictionary = (

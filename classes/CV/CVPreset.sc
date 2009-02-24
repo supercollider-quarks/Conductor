@@ -20,6 +20,8 @@ CVPreset {
 	input_ { | input | input.do { |in, i|	items[i].input_(in)} }
 	input { ^items.collect{|cv| cv.input } }
 
+	asInput { | vals | vals.collect { | v, i | items[i].asInput(v) } }
+	
 //	input_ { | input | presetCV.input_(input) }
 //	input { ^presetCV.input }
 		

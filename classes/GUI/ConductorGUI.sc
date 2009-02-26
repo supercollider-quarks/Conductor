@@ -109,7 +109,40 @@ ConductorGUI : GUIEvent {
 				ctl = SimpleController(player).put(\synch, { |m,c,v| 
 					defer { playButton.value = v }
 				});
-			}
+			};
+			
+			~simplePlayerGUI = { | win, name, player, rect|
+				var bounds, stringWidth;
+				var playButton, ctl;
+				
+				rect = rect ?? ~simpleButtonRect;
+				name = name.asString;
+				stringWidth = (name.size + 1) * ~letterWidth;
+				rect.width = stringWidth;
+		
+				playButton = ~simpleButton.value(win, rect);
+		
+				playButton
+					.action_({ | view | var val, msg;
+					
+						val = view.value;
+						[ {player.stop; },
+						  {player.play; },
+						][val].value;
+					})		
+					.onClose_({
+						ctl.remove;  
+						playButton = nil;
+					})		
+					.states_([
+						[name, Color.new255(100, 200, 100),Color(0.2,0.2,0.2,1)],
+						[name, Color.red(0.6),Color(0.2,0.2,0.2,1)],
+					]);
+		
+				ctl = SimpleController(player).put(\synch, { |m,c,v| 
+					defer { playButton.value = v }
+				});
+			};
 		}
 	}
 

@@ -245,29 +245,25 @@ Conductor : Environment {
 	
 //player interface
 
-	add { | object |
-		player.add(object)
-	}
-	
 	action_ { | playFunc, stopFunc, pauseFunc, resumeFunc |
-		this.add ( ActionPlayer(playFunc, stopFunc, pauseFunc, resumeFunc ) )
+		this.player.add ( ActionPlayer(playFunc, stopFunc, pauseFunc, resumeFunc ) )
 	}
 
 	buffer_ { | ev| 
 		ev.parent = CVEvent.bufferEvent;
-		this.add(ev);
+		this.player.add(ev);
 	}
 	
 	controlBus_ { | ev, cvs|
 		ev[\cvs] = cvs;
 		ev.parent = CVEvent.controlBusEvent;
-		this.add(ev)
+		this.player.add(ev)
 	}
 
 	synth_ { | ev, cvs|
 		ev[\cvs] = cvs;
 		ev.parent = CVEvent.synthEvent;
-		this.add(ev)
+		this.player.add(ev)
 	}
 
 	synthDef_ { | function, cvs, ev|
@@ -278,31 +274,40 @@ Conductor : Environment {
 		ev	.put(\instrument, name)
 			.put(\cvs, cvs);
 		ev.parent_(CVEvent.synthEvent);
-		this.add(ev);
+		this.player.add(ev);
 		^ev
 	}
 
 	group_ { | ev, cvs|
 		ev[\cvs] = cvs;
 		ev.parent = CVEvent.groupEvent;
-		this.add(ev)
+		this.player.add(ev)
 	}
 	
 	task_ { |func, clock, quant|
-		this.add(TaskPlayer(func,clock, quant));
+		this.player.add(TaskPlayer(func,clock, quant));
 	}
 	
 	pattern_ { | pat, clock, event, quant |
-		this.add(PatternPlayer(pat, clock, event, quant) )
+		this.player.add(PatternPlayer(pat, clock, event, quant) )
 	}
 
+	nodeProxy_ { | nodeProxy, args, bus, numChannels, group, multi = false |
+		this.player.add(NodeProxyPlayer(nodeProxy, args, bus, numChannels, group, multi) )
+	}
+
+	updateNPCV {| nodeProxy, key, value |
+		var cv;
 		
+		if ( (cv = this[key]).notNil) { 
+			if (value.notNil) { cv.value_(value) }
+		} {
+			cv = this.addCV(key, value);
+			cv.action_({ nodeProxy.prset(key, cv.value) });
+			nodeProxy.prset(key, cv.value);
+		}		
+	}
 
-
-//	nodeProxy_ { | nodeProxy, args, bus, group |
-//		this.add(NodeProxyPlayer(nodeProxy, args, bus, group) )
-//	}
-//	
 	addCon { | name, func|
 		var con;
 		name = name.asSymbol;
@@ -322,28 +327,12 @@ Conductor : Environment {
 						
 	}
 
-	updateNPCV {| nodeProxy, key, value |
-		var cv;
-		
-		if ( (cv = this[key]).notNil) { 
-			if (value.notNil) { cv.value_(value) }
-		} {
-			cv = this.addCV(key, value);
-			cv.action_({ nodeProxy.prset(key, cv.value) });
-			nodeProxy.prset(key, cv.value);
-		}		
-	}
 
-	nodeProxy_ { | nodeProxy, args, bus, numChannels, group, multi = false |
-		this.add(NodeProxyPlayer(nodeProxy, args, bus, numChannels, group, multi) )
-	}
-
-
-	useMIDI { 
+	useMIDI { | argKeys |
 		var conductor = this;
-		if (conductor.valueKeys.includes(\mappings).not) {
+		if (conductor.valueKeys.includes(\waitControlMappings).not) {
 			conductor.valueKeys = conductor.valueKeys ++ \mappings;
-			conductor[\mappings] = Ref( () );
+			conductor[\waitControlMappings] = Ref( () );
 		};
 		conductor.gui.guis.put('map MIDI', 
 			 { |win, name, interp|
@@ -359,7 +348,7 @@ Conductor : Environment {
 							~ccAssigns = ccAssigns = ();
 							con.noSettings;
 							con.name_("MIDI mapper");
-							keys = conductor.gui.keys.select{ | k | conductor[k].class === CV };
+							keys = argKeys ?? { conductor.gui.keys.flat.select{ | k | conductor[k].class === CV } };
 							
 							keys.do({ | k | con.addCV(k) });
 							keys.do({ | k | con[k].sp(0,0,2,1) });
@@ -374,7 +363,7 @@ Conductor : Environment {
 									packet = ev.chan * 128 + ev.b;
 									activeKeys = keys.select { | k | con[k].value == 1 };
 									if (activeKeys.size > 0) {
-										conductor[\mappings].value.put(packet, activeKeys.copy);
+										conductor[\waitControlMappings].value.put(packet, activeKeys.copy);
 									defer {
 										activeKeys.do { | k | con[k].value = 2 }
 									}
@@ -399,6 +388,7 @@ Conductor : Environment {
 		 	var routine;
 			~simpleButton.value(win, Rect(0,0,60, 20))
 				.states_([["midi", Color.black, Color.hsv(0, 0.7,1)], ["midi", Color.red, Color.black] ])
+				// do this directly in the gui to keep it disconnected from CmdPeriod
 				.action_({ |bt |
 					if (bt.value == 0) {
 						routine.stop; routine.originalStream.stop; routine = nil;
@@ -407,7 +397,7 @@ Conductor : Environment {
 						routine = Task { var ev,keys;
 							loop {
 								ev = MIDIIn.waitControl;
-								if ( (keys = conductor[\mappings].value[ev.chan * 128 + ev.b]).notNil) {
+								if ( (keys = conductor[\waitControlMappings].value[ev.chan * 128 + ev.b]).notNil) {
 									keys.do { | key |
 										conductor[key].input_(ev.c/127);
 									}

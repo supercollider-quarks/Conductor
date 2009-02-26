@@ -296,18 +296,6 @@ Conductor : Environment {
 		this.player.add(NodeProxyPlayer(nodeProxy, args, bus, numChannels, group, multi) )
 	}
 
-	updateNPCV {| nodeProxy, key, value |
-		var cv;
-		
-		if ( (cv = this[key]).notNil) { 
-			if (value.notNil) { cv.value_(value) }
-		} {
-			cv = this.addCV(key, value);
-			cv.action_({ nodeProxy.prset(key, cv.value) });
-			nodeProxy.prset(key, cv.value);
-		}		
-	}
-
 	addCon { | name, func|
 		var con;
 		name = name.asSymbol;

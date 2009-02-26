@@ -103,7 +103,11 @@ CV : Stream {
 	asOSCArgEmbeddedArray { | array| ^value.asOSCArgEmbeddedArray(array) }
 	
 	indexedBy { | key |
-		^Pfunc{ | ev | this.value.at(ev[key] ) }
+		^Pfunc{ | ev | value.at(ev[key] ) }
+	}
+
+	windex { | key |
+		^Pfunc{ | ev | value.asArray.normalizeSum.windex  }
 	}
 
 }

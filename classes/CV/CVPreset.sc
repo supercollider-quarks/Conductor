@@ -31,12 +31,12 @@ CVPreset {
 		presetCV.spec.maxval = presets.size;
 	}
 	
-	add { 	
+	addPreset { 	
 		this.presets = presets.add(this.input); 
 		presetCV.spec.maxval = presets.size;
 	}
 	
-	remove { arg index;
+	removePreset { arg index;
 		if (presets.notNil, {
 			presets.removeAt(index);
 			presetCV.spec.maxval = presets.size;

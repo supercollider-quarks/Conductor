@@ -159,7 +159,7 @@ CVEvent {
 		);
 		CVEvent.actionEvent = ( asEventStreamPlayer: #{|ev| ev } );
 		
-		Event.parentEvents[\synthEvent] = CVEvent.synthEvent;
-		Event.parentEvents[\groupEvent] = CVEvent.groupEvent;			 
+//		Event.parentEvents[\synthEvent] = CVEvent.synthEvent;
+//		Event.parentEvents[\groupEvent] = CVEvent.groupEvent;			 
 	}
 }

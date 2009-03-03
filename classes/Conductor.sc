@@ -4,6 +4,7 @@ Conductor : Environment {
 	var <>gui;			// defines gui display of conductor in windows
 	var <>player;
 	var <>preset;
+	var <>interpolator;
 	
 	*initClass {
 		StartUp.add ({
@@ -296,21 +297,34 @@ Conductor : Environment {
 		this.player.add(NodeProxyPlayer(nodeProxy, args, bus, numChannels, group, multi) )
 	}
 
-	addCon { | name, func|
+	add { | name, obj, guiSpec |
+		[name, obj, guiSpec].postln;
+		name = name.asSymbol;
+		this.put(name, obj);
+		if (preset.notNil) { preset.items = preset.items.add(obj) };
+		if (guiSpec.notNil) {
+			gui.guis.put(name, guiSpec)
+		};
+		this.gui.addKeys( [name] );
+	}
+	
+	addCon { | name, func, gui|
 		var con;
 		name = name.asSymbol;
 		con = Conductor.new;
 		con.name_(name);
 		this.put(name, con.make(func) );
-		gui.addKeys( [name] );
+		this.gui.addKeys( [name] );
 	}
 	
-	addCV { | name, val |
+	addCV { | name, val, gui |
 		var cv, v;
+		name = name.asSymbol;
 		cv = Conductor.makeCV(name, val);
 		this.put(name, cv);
 		if (preset.notNil) { preset.items = preset.items.add(cv) };
-		gui.addKeys( [name] );
+		gui.postln;
+		this.gui.addKeys( [name] );
 		^cv;
 						
 	}

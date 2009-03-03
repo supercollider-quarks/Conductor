@@ -9,11 +9,11 @@ ConductorPlayer {
 		^super.newCopyArgs(conductor).init;
 	}
 	
-	input { ^currentState/4 }
-	input_ { | in| this.perform(#[stop, play, pause].at((in * 4).asInteger)) }
-	value {  ^currentState  }
-	value_ { |v| this.perform(#[stop, play, pause].at(v)) }
-	
+//	input { ^currentState/4 }
+//	input_ { | in| this.perform(#[stop, play, pause].at((in * 4).asInteger)) }
+//	value {  ^currentState  }
+//	value_ { |v| this.perform(#[stop, play, pause].at(v)) }
+//	
 	init {
 		server = Server.default;
 		players = [];

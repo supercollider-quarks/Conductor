@@ -56,8 +56,12 @@
 	useMIDI { | argKeys |
 		var conductor = this;
 		if (conductor.valueKeys.includes(\waitControlMappings).not) {
-			conductor.valueKeys = conductor.valueKeys ++ \mappings;
+			conductor.valueKeys = conductor.valueKeys ++ \waitControlMappings;
 			conductor[\waitControlMappings] = Ref( () );
+		};
+		if (conductor.valueKeys.includes(\waiNoteMappings).not) {
+			conductor.valueKeys = conductor.valueKeys ++ \waitNoteMappings;
+			conductor[\waitNoteMappings] = Ref( () );
 		};
 		conductor.gui.guis.put('map MIDI', 
 			 { |win, name, interp|
@@ -89,14 +93,28 @@
 									activeKeys = keys.select { | k | con[k].value == 1 };
 									if (activeKeys.size > 0) {
 										conductor[\waitControlMappings].value.put(packet, activeKeys.copy);
-									defer {
-										activeKeys.do { | k | con[k].value = 2 }
+										defer {
+											activeKeys.do { | k | con[k].value = 2 }
+										}
 									}
 								}
-							};
-						
-							
+							});
+
+							con.task_( { var ev, packet, activeKeys;
+									loop {
+									ev = MIDIIn.waitNoteOn;
+									packet = ev.chan * 128 + ev.b;
+									activeKeys = keys.select { | k | con[k].value == 1 };
+									if (activeKeys.size > 0) {
+										conductor[\waitNoteMappings].value.put(packet, activeKeys.copy);
+										defer {
+											activeKeys.do { | k | con[k].value = 2 }
+										}
+									}
+								}
 							})
+												
+							
 						});
 						w = cond.show("MIDImap", win.bounds.left + win.bounds.width, win.bounds.top, 200, 300);
 						cond.play;
@@ -109,12 +127,12 @@
 			}		
 		);
 		conductor.gui.guis.put(\midi, 
-		 { |win, name, interp|
-		 	var routine;
-			~simpleButton.value(win, Rect(0,0,60, 20))
-				.states_([["midi", Color.black, Color.hsv(0, 0.7,1)], ["midi", Color.red, Color.black] ])
+		 { |win, name, interp| var bt;
+			bt = ~simpleButton.value(win, Rect(0,0,60, 20))
+				.states_([["midi", Color.black, Color.hsv(0, 0.7,1)], ["midi", Color.red, Color.black] ]);
 				// do this directly in the gui to keep it disconnected from CmdPeriod
-				.action_({ |bt |
+				bt.action_(FunctionList([{ |bt |
+				 	var routine;
 					if (bt.value == 0) {
 						routine.stop; routine.originalStream.stop; routine = nil;
 					} {
@@ -123,6 +141,7 @@
 							loop {
 								ev = MIDIIn.waitControl;
 								if ( (keys = conductor[\waitControlMappings].value[ev.chan * 128 + ev.b]).notNil) {
+									keys.postln;
 									keys.do { | key |
 										conductor[key].input_(ev.c/127);
 									}
@@ -130,7 +149,39 @@
 							}
 						}.play;
 					}
-				});
+				},
+				
+				{ |bt |
+				 	var routine, routine2;
+					if (bt.value == 0) {
+						routine.stop; routine.originalStream.stop; routine = nil;
+						routine2.stop; routine2.originalStream.stop; routine2 = nil;
+					} {
+						MIDIIn.connectAll;
+						routine = Task { var ev,keys;
+							loop {
+								ev = MIDIIn.waitNoteOn;
+								if ( (keys = conductor[\waitNoteMappings].value[ev.chan * 128 + ev.b]).notNil) {
+									keys.do { | key |
+										conductor[key].input_(1);
+									}
+								}	
+							}
+						}.play;
+						routine2 = Task { var ev,keys;
+							loop {
+								ev = MIDIIn.waitNoteOff;
+								if ( (keys = conductor[\waitNoteMappings].value[ev.chan * 128 + ev.b]).notNil) {
+									keys.do { | key |
+										conductor[key].input_(0);
+									}
+								}	
+							}
+						}.play;
+					}
+				}])
+				)
+
 			});			
 
 		conductor.gui.header = [ conductor.gui.header[0] ++ \midi ++ 'map MIDI'];
@@ -166,5 +217,52 @@
 		};
 		currentEnvironment.gui.keys = currentEnvironment.gui.keys.add(key);
 	}
+	
+	midiKBD_ { | noteOnFunction, midiChan | 
+		var keyList = ();
+		if (midiChan.isNil) {
+			this.task_ { var ev, result, noteNum;
+			 	loop {
+				 	ev = MIDIIn.watNoteOn;
+				 	noteNum = ev.b;
+				 	keyList[noteNum] = noteOnFunction.value(noteNum, ev.c);
+				}
+			};
+			this.task_ { var ev, result, noteNum;
+			 	loop {
+				 	ev = MIDIIn.watNoteOff;
+				 	noteNum = ev.b;
+				 	if ( (result = keyList[noteNum]).notNil) {
+				 		result.release;
+				 		keyList[noteNum] = nil;
+				 	}
+				}
+			};
+		} {
+			this.task_ { var ev, result, noteNum;
+			 	loop {
+				 	ev = MIDIIn.watNoteOn;
+				 	if (ev.chan == midiChan) {
+					 	noteNum = ev.b;
+					 	keyList[noteNum] = noteOnFunction.value(noteNum, ev.c);
+					}
+				}
+			};
+			this.task_ { var ev, result, noteNum;
+			 	loop {
+				 	ev = MIDIIn.watNoteOff;
+				 	noteNum = ev.b;
+				 	if ( (ev.chan = midiChan) && (result = keyList[noteNum]).notNil) {
+				 		result.release;
+				 		keyList[noteNum] = nil;
+				 	}
+				}
+			};
+		};
+				
+		this.action_({}, { keyList.do { | r | r.release }; keyList = ()  });
+			 	
+	}
+
 
 }

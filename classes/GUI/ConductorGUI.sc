@@ -31,23 +31,23 @@ ConductorGUI : GUIEvent {
 						.states_([["<"]])
 						.action_({
 							interp.targetCV.value = 
-							interp.targetCV.value - 1 mod: interp.presets.size
+							interp.targetCV.value - 1 mod: interp.targetCV.spec.maxval;
 						});
 					~simpleButton.value(win)
 						.states_([[">"]])
 						.action_({
 							interp.targetCV.value = 
-							interp.targetCV.value + 1 mod: interp.presets.size
+							interp.targetCV.value + 1 mod: interp.targetCV.spec.maxval;
 						});
 		
 			};
 			~presetGUI = { |win, name =">", preset|
 				~simpleButton.value(win)
 					.states_([["+"]])
-					.action_({preset.add; preset.presetCV.value_(preset.presets.size - 1)});
+					.action_({preset.addPreset; preset.presetCV.value_(preset.presets.size - 1)});
 				~simpleButton.value(win)
 					.states_([["-"]])
-					.action_({preset.remove(preset.presetCV.value); });
+					.action_({preset.removePreset(preset.presetCV.value); });
 		
 				~simpleButton.value(win)
 					.states_([["<"]])
@@ -209,6 +209,10 @@ ConductorGUI : GUIEvent {
 		};
 	}
 	
+	add { | key, gui |
+		guis.put(key, gui);
+		this.addKeys([key]);
+	}
 	
 	addKeys { | newKeys |
 		var v;

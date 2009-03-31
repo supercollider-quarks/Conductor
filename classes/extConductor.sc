@@ -12,7 +12,7 @@
 						.font_(Font("Courier", 12) )
 						.string_(" status   channel  b      c"); 
 						w.view.decorator.nextLine;
-					SVSync(cv, ListView(w, w.bounds.insetBy(4, 40))
+					cv.connect( ListView(w, w.bounds.insetBy(4, 40))
 								.resize_(5)
 								.font_(Font("Courier", 12) )
 								.hiliteColor_(Color.blue(0.2, 0.2) )
@@ -72,13 +72,15 @@
 						MIDIIn.connectAll;
 						if (w.isNil) {
 						cond = Conductor.make({ | con |
-							var keys, ccAssigns, kdAssigns;
+							var keys;
+//							var ccAssigns, kdAssigns;
+//							~ccAssigns = ccAssigns = ();
 							con.gui.header = [];
-							~ccAssigns = ccAssigns = ();
 							con.noSettings;
 							con.name_("MIDI mapper");
 							keys = argKeys ?? { conductor.gui.keys.flat.select{ | k | conductor[k].class === CV } };
-							
+							keys = argKeys ?? { conductor.gui.keys.flat.select{ | k | conductor[k].respondsTo(\input_)} };
+							keys = #[player] ++ keys;
 							keys.do({ | k | con.addCV(k) });
 							keys.do({ | k | con[k].sp(0,0,2,1) });
 							con.gui.use {
@@ -126,68 +128,47 @@
 				});
 			}		
 		);
-		conductor.gui.guis.put(\midi, 
-		 { |win, name, interp| var bt;
-			bt = ~simpleButton.value(win, Rect(0,0,60, 20))
-				.states_([["midi", Color.black, Color.hsv(0, 0.7,1)], ["midi", Color.red, Color.black] ]);
-				// do this directly in the gui to keep it disconnected from CmdPeriod
-				bt.action_(FunctionList([{ |bt |
-				 	var routine;
-					if (bt.value == 0) {
-						routine.stop; routine.originalStream.stop; routine = nil;
-					} {
-						MIDIIn.connectAll;
-						routine = Task { var ev,keys;
-							loop {
-								ev = MIDIIn.waitControl;
-								if ( (keys = conductor[\waitControlMappings].value[ev.chan * 128 + ev.b]).notNil) {
-									keys.postln;
-									keys.do { | key |
-										conductor[key].input_(ev.c/127);
-									}
-								}	
-							}
-						}.play;
-					}
-				},
-				
-				{ |bt |
-				 	var routine, routine2;
-					if (bt.value == 0) {
-						routine.stop; routine.originalStream.stop; routine = nil;
-						routine2.stop; routine2.originalStream.stop; routine2 = nil;
-					} {
-						MIDIIn.connectAll;
-						routine = Task { var ev,keys;
-							loop {
-								ev = MIDIIn.waitNoteOn;
-								if ( (keys = conductor[\waitNoteMappings].value[ev.chan * 128 + ev.b]).notNil) {
-									keys.do { | key |
-										conductor[key].input_(1);
-									}
-								}	
-							}
-						}.play;
-						routine2 = Task { var ev,keys;
-							loop {
-								ev = MIDIIn.waitNoteOff;
-								if ( (keys = conductor[\waitNoteMappings].value[ev.chan * 128 + ev.b]).notNil) {
-									keys.do { | key |
-										conductor[key].input_(0);
-									}
-								}	
-							}
-						}.play;
-					}
-				}])
-				)
 
-			});			
+		~midi = Conductor.make { | con |
+			con.simpleGUI;
+			con.name_("midi");
+			con.task_({ var ev, keys;
+				loop {
+					ev = MIDIIn.waitControl;
+					if ( (keys = conductor[\waitControlMappings].value[ev.chan * 128 + ev.b]).notNil) {
+						keys.do { | key |
+							conductor[key].input_(ev.c/127);
+						}
+					}	
+				}
+			});
+			con.task_({ var ev, keys;
+				loop {
+					ev = MIDIIn.waitNoteOn;
+					if ( (keys = conductor[\waitNoteMappings].value[ev.chan * 128 + ev.b]).notNil) {
+						keys.do { | key |
+							conductor[key].input_(ev.c/127);
+						}
+					}	
+				}
+			});
+			con.task_({ var ev, keys;
+				loop {
+					ev = MIDIIn.waitNoteOff;
+					if ( (keys = conductor[\waitNoteMappings].value[ev.chan * 128 + ev.b]).notNil) {
+						keys.do { | key |
+							conductor[key].input_(0);
+						}
+					}	
+				}
+			});
+		};		
+
 
 		conductor.gui.header = [ conductor.gui.header[0] ++ \midi ++ 'map MIDI'];
 	}
 	
-	addCursor { | key |
+	addCursor { | key = \cursor |
 	
 		currentEnvironment[key] = Conductor.make { | con, cursor = \Conductor, position, lo, hi, rate, increment |
 			hi.value = 1;
@@ -215,7 +196,7 @@
 			});
 			cursor.task_({loop { position.value = (wrap( position + increment, lo, hi).value); rate.value.wait } });
 		};
-		currentEnvironment.gui.keys = currentEnvironment.gui.keys.add(key);
+		currentEnvironment.gui.keys = currentEnvironment.gui.keys ++ [key];
 	}
 	
 	midiKBD_ { | noteOnFunction, midiChan | 

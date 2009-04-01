@@ -71,3 +71,15 @@
 	}
 
 }
+
++Object {
+	postL { | length = 10 |
+		var str = this.asString;
+		(str ++ String.fill(length - str.size, Char.space))[0..length - 1].post;
+	}
+	
+	postLn { | length = 10 |
+		var str = this.asString;		
+		(str ++ String.fill(length - str.size, Char.space))[0..length - 1].postln;
+	}
+}

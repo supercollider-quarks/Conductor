@@ -15,6 +15,10 @@ Conductor : Environment {
 				
 				unipolar: 	ControlSpec(0, 1),
 				bipolar: 		ControlSpec(-1, 1, default: 0),
+				
+				i_out:		ControlSpec(0, 1023, 'lin', 1, 0),
+				out:			ControlSpec(0, 1023, 'lin', 1, 0),
+				in:			ControlSpec(0, 1023, 'lin', 1, 0),
 	
 				freq: 		ControlSpec(20, 20000, \exp, 0, 440, units: " Hz"),
 				lofreq: 		ControlSpec(0.1, 100, \exp, 0, 6, units: " Hz"),
@@ -67,6 +71,11 @@ Conductor : Environment {
 			}
 		}
 	}
+	
+	*addSpec { | name, spec |
+		specs[name.asSymbol] = spec;
+	}
+		
 	*make { arg func; 
 		var obj, args, names;
 		obj = this.new;
@@ -93,8 +102,17 @@ Conductor : Environment {
 	}
 
 	*makeCV { | name, value |
-		^CV(specs[name.asString.select{ | c | c.isAlpha}.asSymbol], value)
+		^CV(this.findSpec(name), value)
 	}
+	
+	*findSpec { | name |
+		var spec = specs[name.asSymbol];
+		if (spec.isNil) {
+			spec = specs[name.asString.select{ | c | c.isAlpha}.asSymbol]
+		};
+		^spec;
+	}
+	
 	makeArgs { arg func;
 		var argList, size, names, argNames;
 		var theClassName, name, obj;
@@ -308,13 +326,30 @@ Conductor : Environment {
 		this.gui.addKeys( [name] );
 	}
 	
-	addCon { | name, func, gui|
-		var con;
-		name = name.asSymbol;
-		con = Conductor.new;
-		con.name_(name);
-		this.put(name, con.make(func) );
-		this.gui.addKeys( [name] );
+	addCon { | name, func|
+		var con = Conductor.new
+			.name_(name)
+			.make(func);
+		this.add(con.name, con);
+	}
+
+	addActions { | kv |
+		var keys;
+		keys = kv.pairsDo { | key, func |
+			var player;
+			player = ConductorPlayer(this);
+			player.name_(key);
+			gui.guis.put(key, \playStopGUI);
+			this.put(key, player);
+			if (func.isSequenceableCollection) { 
+				player.action_(*func)
+			} {
+				player.action_({ func.value; defer( { player.stop }, 0.05) })
+			};
+			key
+		};
+		gui.keys = gui.keys.add(keys);
+		valueKeys = valueKeys ++ keys;
 	}
 	
 	addCV { | name, val, gui |
@@ -323,11 +358,26 @@ Conductor : Environment {
 		cv = Conductor.makeCV(name, val);
 		this.put(name, cv);
 		if (preset.notNil) { preset.items = preset.items.add(cv) };
-		gui.postln;
 		this.gui.addKeys( [name] );
 		^cv;
 						
 	}
 
-		
+	addCVs {| kv |
+		var cv, newPairs = [];
+		kv.pairsDo { |key, value|
+			if ( (cv = this[key]).notNil) { 
+				if (value.notNil) { cv.value_(value) }
+			} {
+				cv = this.addCV(key, value);
+				newPairs = newPairs.add(key).add(cv)
+			}		
+		};
+		^newPairs
+	}
+
+	simpleGUI {
+		this.noSettings;
+		gui.use { ~playerGUI = ~playStopGUI };
+	}	
 }

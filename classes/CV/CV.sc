@@ -109,5 +109,10 @@ CV : Stream {
 	windex { | key |
 		^Pfunc{ | ev | value.asArray.normalizeSum.windex  }
 	}
+	
+	at { | index | ^value.at(index) }
+	put { | index, val | value = value.putt(index, val) }
+	size { ^value.size }
+	
 
 }

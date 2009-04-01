@@ -16,7 +16,7 @@ SV : CV {
 		var index = 0;
 		items = argItems ? [\nil];
 		if (default.isNumber.not) { default = this.getIndex(default) };
-		super.sp(default, 0, items.size, 1, 'lin');
+		super.sp(default, 0, items.size - 1, 1, 'lin');
 		this.changed(\items);
 	}
 	
@@ -38,6 +38,6 @@ SV : CV {
 	sp { | default = 0, symbols| this.items_(symbols, default) }
 	
 	next { ^items[value] }
-
+	
 }
 

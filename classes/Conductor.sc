@@ -378,6 +378,6 @@ Conductor : Environment {
 
 	simpleGUI {
 		this.noSettings;
-		gui.use { ~playerGUI = ~playStopGUI };
+		gui.use { ~playerGUI = ~simplePlayerGUI };
 	}	
 }

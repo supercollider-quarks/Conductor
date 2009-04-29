@@ -5,7 +5,6 @@ Conductor : Environment {
 	var <>gui;			// defines gui display of conductor in windows
 	var <>player;
 	var <>preset;
-	var <>interpolator;
 	
 	*initClass {
 		StartUp.add ({

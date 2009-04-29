@@ -12,7 +12,7 @@ GUIEvent : Environment {
 
 			vh:		200,				// height of a vertical slider
 			vw: 		20, 				// width of a vertical slider
-			
+			scroll:	false,
 			// functions that specify default dimensions of various views
 			
 			numericalRect: 		{ Rect(0,0, ~labelW, ~h) },
@@ -32,7 +32,7 @@ GUIEvent : Environment {
 // GRAPHIC PRIMITIVES
 			window: { |  name, rect |
 				var win;
-				win = Window(name, rect);
+				win = Window(name, rect, scroll: ~scroll);
 				win.view.decorator_(FlowLayout(win.view.bounds));
 				win;
 			},

@@ -167,10 +167,10 @@ ConductorSync : CVSync {
 		cv.player.addDependant(this); 		 	// when CV changes CVsync:update is called
 	}
 	
-	linkToView {						
+	linkToView {	
 		view.action = this;			
 		CVSync.all[view] = CVSync.all[view].add(this);
-		view.onClose = CVSync				
+		view.onClose = CVSync;				
 	}
 		
 	update { | changer, what ...moreArgs |	// called when CV changes

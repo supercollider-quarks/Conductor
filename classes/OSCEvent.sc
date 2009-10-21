@@ -38,7 +38,7 @@ OSCEvent {
 	wait { 
 		thread = thisThread;
 		if (dispatcher.isNil) { this.add };
-		this.yield
+		nil.yield
 	}	
 	
 	action {}							// needed to patch into current OSCresponder set up
@@ -52,7 +52,7 @@ r = Routine({ var ev;
 	loop { ev.wait; ev.msg.postln; ev.respAddr.postln; }
 });
 r.reset.next
-(server: Server.internal).play
+( ).play
 OSCresponder.all
 r.stop
 

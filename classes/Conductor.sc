@@ -352,13 +352,17 @@ Conductor : Environment {
 		valueKeys = valueKeys ++ keys;
 	}
 	
-	addCV { | name, val, gui |
+	addCV { | name, val, argGui |
 		var cv, v;
 		name = name.asSymbol;
 		cv = Conductor.makeCV(name, val);
 		this.put(name, cv);
+		valueKeys = valueKeys.add( name );
 		if (preset.notNil) { preset.items = preset.items.add(cv) };
 		this.gui.addKeys( [name] );
+		if (argGui.notNil) {
+			this.gui.guis.put(name, argGui);
+		};
 		^cv;
 						
 	}

@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Style-Type" content="text/css">
 <title></title>
 <meta name="Generator" content="Cocoa HTML Writer">
-<meta name="CocoaVersion" content="949.43">
+<meta name="CocoaVersion" content="949.54">
 <style type="text/css">
 p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 18.0px Helvetica}
 p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
@@ -18,19 +18,19 @@ p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Monaco}
 p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; min-height: 12.0px}
 p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Helvetica}
 p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Helvetica; min-height: 16.0px}
-p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #961e1e}
-p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #961e1e}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #862323}
+p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #862323}
 p.p14 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Monaco; min-height: 16.0px}
-p.p15 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Monaco; color: #961e1e}
-p.p16 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #426f0e}
-p.p17 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #001db9}
+p.p15 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Monaco; color: #862323}
+p.p16 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #4d6d13}
+p.p17 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #0023b6}
 span.s1 {font: 9.0px Helvetica}
 span.s2 {font: 12.0px Helvetica}
 span.s3 {color: #000000}
-span.s4 {color: #001db9}
-span.s5 {color: #426f0e}
+span.s4 {color: #0023b6}
+span.s5 {color: #4d6d13}
 span.s6 {color: #606060}
-span.s7 {color: #961e1e}
+span.s7 {color: #862323}
 span.s8 {font: 13.0px Helvetica}
 span.Apple-tab-span {white-space:pre}
 </style>
@@ -105,12 +105,12 @@ span.Apple-tab-span {white-space:pre}
 <p class="p4"><br></p>
 <p class="p10"><b>windex</b></p>
 <p class="p10"><b><span class="Apple-tab-span">	</span></b>Interprets the value of the CV as a probability table and returns a weighted random value</p>
-<p class="p11"><b></b><br></p>
+<p class="p11"><br></p>
 <p class="p10"><b>indexedBy (key)</b></p>
 <p class="p10"><b><span class="Apple-tab-span">	</span></b>For use in Patterns:<span class="Apple-converted-space">  </span>uses the value of key in the current Event as an index and returns the</p>
 <p class="p10"><span class="Apple-tab-span">	</span>indexed value</p>
-<p class="p11"><b></b><br></p>
-<p class="p11"><b></b><br></p>
+<p class="p11"><br></p>
+<p class="p11"><br></p>
 <p class="p5"><b>CV connections using SimpleControllers</b></p>
 <p class="p4"><br></p>
 <p class="p3"><span class="Apple-tab-span">	</span>When a CV's value is changed a <b>changed </b>message (with <b>'synch' </b>as the identifier) is send to update</p>
@@ -162,19 +162,24 @@ span.Apple-tab-span {white-space:pre}
 <p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>w.view.decorator = <span class="s4">FlowLayout</span>(w.view.bounds);</p>
 <p class="p2"><br></p>
 <p class="p13"><b>//<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b>CVs can be connected to SCSlider and SCNumberBox.</p>
-<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>z = <span class="s4">SCNumberBox</span>(w, <span class="s4">Rect</span>(0, 0, 50, 20)).connect(a,w);</p>
-<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>y = <span class="s4">SCSlider</span>(w, <span class="s4">Rect</span>(50, 0, 150, 20)).connect(a,w);</p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>z = <span class="s4">SCNumberBox</span>(w, <span class="s4">Rect</span>(0, 0, 50, 20));</p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.connect(z);</p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>y = <span class="s4">SCSlider</span>(w, <span class="s4">Rect</span>(50, 0, 150, 20));</p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.connect(y);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
 <p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>w.view.decorator.nextLine;</p>
 <p class="p9"><br></p>
-<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s4">SCNumberBox</span>(w, <span class="s4">Rect</span>(0, 0, 50, 20)).connect(b,w);</p>
-<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s4">SCSlider</span>(w, <span class="s4">Rect</span>(50, 0, 150, 20)).connect(b,w);</p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b.connect( <span class="s4">SCNumberBox</span>(w, <span class="s4">Rect</span>(0, 0, 50, 20)) );</p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b.connect( <span class="s4">SCSlider</span>(w, <span class="s4">Rect</span>(50, 0, 150, 20))<span class="Apple-converted-space">  </span>);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
 <p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>w.view.decorator.nextLine;</p>
 <p class="p2"><br></p>
 <p class="p13"><b>//<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b>Pairs of CVs can be connected to SCRangeSlider, SC2DSlider .</p>
-<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s4">SCRangeSlider</span>(w, <span class="s4">Rect</span>(0, 0, 200, 20)).connect([a,b],w);</p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[a,b].connect( <span class="s4">SCRangeSlider</span>(w, <span class="s4">Rect</span>(0, 0, 200, 20)) );</p>
 <p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>w.view.decorator.nextLine;</p>
 <p class="p9"><br></p>
-<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s4">SC2DSlider</span>(w, <span class="s4">Rect</span>(00, 0, 200, 200)).connect([a,b],w);</p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[a,b].connect( <span class="s4">SC2DSlider</span>(w, <span class="s4">Rect</span>(00, 0, 200, 200)) );</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
 <p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>)</p>
 <p class="p2"><b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
 <p class="p5"><b>Server connections</b></p>

@@ -11,7 +11,7 @@
 		chans = this.size;
 		
 		colors =( (0..chans - 1)/chans ).collect { | h | Color.hsv(h + hue * range mod: 1 ,saturation, value) };
-		win = GUI.window.new("warps", Rect(20, 20, 500, 500));
+		win = GUI.window.new(name ? "warps", Rect(20, 20, 500, 500));
 		win.front;
 		view = win.view;
 		view.background_(background );

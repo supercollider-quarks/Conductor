@@ -165,6 +165,14 @@ GUIEvent : Environment {
 				MovieView(win, rect ?? ~movieRect)
 			},
 
+			button: { |win, name, cv, rect|	
+				Button(win, rect  ?? ~simpleButtonRect)
+					.states_([
+						[name, Color.black, Color.grey(0.4)],
+						[name, Color.white, Color.blue(0.3)]
+					]);
+			},
+
 			simpleButton: { |win, rect|	
 				Button(win, rect  ?? ~simpleButtonRect)
 			},

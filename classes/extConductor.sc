@@ -132,6 +132,8 @@
 		~midi = Conductor.make { | con |
 			con.simpleGUI;
 			con.name_("midi");
+			con.action_({ MIDIIn.connectAll });
+
 			con.task_({ var ev, keys;
 				loop {
 					ev = MIDIIn.waitControl;
@@ -204,14 +206,14 @@
 		if (midiChan.isNil) {
 			this.task_ { var ev, result, noteNum;
 			 	loop {
-				 	ev = MIDIIn.watNoteOn;
+				 	ev = MIDIIn.waitNoteOn;
 				 	noteNum = ev.b;
 				 	keyList[noteNum] = noteOnFunction.value(noteNum, ev.c);
 				}
 			};
 			this.task_ { var ev, result, noteNum;
 			 	loop {
-				 	ev = MIDIIn.watNoteOff;
+				 	ev = MIDIIn.waitNoteOff;
 				 	noteNum = ev.b;
 				 	if ( (result = keyList[noteNum]).notNil) {
 				 		result.release;
@@ -222,7 +224,7 @@
 		} {
 			this.task_ { var ev, result, noteNum;
 			 	loop {
-				 	ev = MIDIIn.watNoteOn;
+				 	ev = MIDIIn.waitNoteOn;
 				 	if (ev.chan == midiChan) {
 					 	noteNum = ev.b;
 					 	keyList[noteNum] = noteOnFunction.value(noteNum, ev.c);
@@ -231,7 +233,7 @@
 			};
 			this.task_ { var ev, result, noteNum;
 			 	loop {
-				 	ev = MIDIIn.watNoteOff;
+				 	ev = MIDIIn.waitNoteOff;
 				 	noteNum = ev.b;
 				 	if ( (ev.chan = midiChan) && (result = keyList[noteNum]).notNil) {
 				 		result.release;

@@ -79,7 +79,8 @@ CV : Stream {
 			tabletSlider2D:	CVSyncProps(#[x, y]),
 			ezSlider:			CVSyncValue,
 			ezNumber:			CVSyncValue,
-			knob:			CVSyncInput
+			knob:			CVSyncInput,
+			button:			CVSyncValue,
 		);
 		CV.viewDictionary = IdentityDictionary.new;
 		
@@ -88,7 +89,7 @@ CV : Stream {
 			#[ 
 			numberBox, slider, rangeSlider, slider2D, multiSliderView, 
 			popUpMenu, listView, 
-			tabletSlider2D, ezSlider, ezNumber, knob].collect { | name |
+			tabletSlider2D, ezSlider, ezNumber, knob, button].collect { | name |
 				if ( (class = gui.perform(name)).notNil) {
 					CV.viewDictionary.put(class, connectDictionary.at(name))
 				}

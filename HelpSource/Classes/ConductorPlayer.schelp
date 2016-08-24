@@ -1,5 +1,7 @@
 TITLE:: ConductorPlayer
 
+SUMMARY:: Add play/pause/stop/resume functionality to Conductor
+
 RELATED:: Classes/Conductor, Classes/CVEvent, Classes/ActionPlayer, Classes/PatternPlayer, Classes/TaskPlayer, Classes/NodeProxyPlayer, Classes/NodeEvent
 
 DESCRIPTION:: STRONG::ConductorPlayer:: provides unified control for any collection of 'players', which are objects that respond to TELETYPE::stop/play/pause/resume::.  The player classes listed above (STRONG::ActionPlayer::, STRONG::PatternPlayer::, STRONG::TaskPlayer::, and STRONG::NodeProxyPlayer::) adapt standard classes to this interface.
@@ -118,7 +120,3 @@ any of the Servers listed in the instance variable server.
 
 METHOD::draw
 Draws the ConductorPlayer in a ConductorGUI.
-
-
-
-

@@ -1,6 +1,6 @@
 TITLE:: ConductorPlayer
 
-RELATED:: Conductor, CVEvent, ActionPlayer, PatternPlayer, TaskPlayer, NodeProxyPlayer, NodeEvent
+RELATED:: Classes/Conductor, Classes/CVEvent, Classes/ActionPlayer, Classes/PatternPlayer, Classes/TaskPlayer, Classes/NodeProxyPlayer, Classes/NodeEvent
 
 DESCRIPTION:: STRONG::ConductorPlayer:: provides unified control for any collection of 'players', which are objects that respond to TELETYPE::stop/play/pause/resume::.  The player classes listed above (STRONG::ActionPlayer::, STRONG::PatternPlayer::, STRONG::TaskPlayer::, and STRONG::NodeProxyPlayer::) adapt standard classes to this interface.
 

@@ -2,7 +2,7 @@ TITLE:: CV
 
 SUMMARY:: A dynamic container for a number that can be plugged into Patterns, Streams, GUIs, Synths, etc.
 
-RELATED:: SV, Conductor
+RELATED:: Classes/SV, Classes/Conductor
 
 DESCRIPTION::
 A CV models a single floating point value or an array of such values constrained to a specific numerical

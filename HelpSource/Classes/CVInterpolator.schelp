@@ -2,10 +2,10 @@ TITLE:: CVInterpolator
 
 SUMMARY:: Enables interpolation between saved 'presets'.
 
-RELATED:: CVPreset, CVInterpolator, CV, Conductor, ConductorGUI
+RELATED:: Classes/CVPreset, Classes/CVInterpolator, Classes/CV, Classes/Conductor, Classes/ConductorGUI
 
 DESCRIPTION::
-CVPreset saves 'presets' for an array of LINK::Classes/CV::s or other objects that respond to STRONG::input:: and STRONG::input_::
+CVInterpolator is a LINK::CLasses/CVPreset:: that enables interpolation between saved presets.
 
 INSTANCEMETHODS::
 

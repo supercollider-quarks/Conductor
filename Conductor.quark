@@ -1,4 +1,4 @@
-// a quark file contains a dictionary containing all needed and un-needed information on the particular quark.  
+// a quark file contains a dictionary containing all needed and un-needed information on the particular quark.
 
 (
 // a must:
@@ -12,7 +12,6 @@
 	\organization: 	"WUEMS",
 	\country: 		"USA",
 	\since: 		"2007",
-	\helpdoc: 	"help/Conductor.html",
 	\ext_dependancy: "",
 	\url:           "",
 

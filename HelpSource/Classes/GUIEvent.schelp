@@ -57,7 +57,7 @@ TABLE::
 ## STRONG::list::						|| ListView
 ## STRONG::movie::					|| MovieView
 ## STRONG::popup::					|| PopupMenu
-## STRONG::scmultislider::	|| MultiSliderView
+## STRONG::multislider::	|| MultiSliderView
 ## STRONG::knob::						|| Knob, uses CompositeView
 ## STRONG::vnumerical::			|| NumberBox, uses CompositeView
 ::

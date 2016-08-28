@@ -8,57 +8,7 @@ DESCRIPTION::
 ConductorGUI is an Enivronment whose parent environment (defined by [GUIEvent]) is a 'style sheet'
 of default gui functions that determine how a LINK::Classes/Conductor:: is to be displayed.
 
-INSTANCEMETHODS::
-
-METHOD::conductor
-RETURNS::the conductor to be displayed
-
-METHOD::keys
-RETURNS:: an STRONG::Array:: of keys and arrays of keys of items in the LINK::Classes/Conductor:: to be displayed.
-DISCUSSION:: Each item in the Array is displayed on its own line, so arrays of keys share a line. Unless overridden in guis each item identified by a key is sent a draw message.
-
-METHOD::header
-RETURNS:: an STRONG::Array:: of keys of items to be displayed before those in keys.  Defaults to
-TELETYPE::#[player, settings, preset]::
-
-METHOD::guis
-RETURNS::an STRONG::IdentityDictionary:: of gui functions that override the normal draw method of an item in the Conductor
-
-METHOD::stopOnClose
-DISCUSSION::flag determines if Conductor is stopped when gui window is closed
-
-
-METHOD::draw
-DISCUSSION::this is the command to draw the Conductor's GUI
-
-SECTION:: Using ConductorGUI
-
-ConductorGUI  defines default gui functions for the most commonly used classes within a Conductor:
-
-TABLE::
-## cvGUI || TELETYPE::~nslider::, for single-valued CV's
-## multicvGUI || TELETYPE::~multislider::, for multi-valued CV's
-## svGUI || TELETYPE::~popup::, for SV's
-
-## settingsGUI || for ConductorSettingsGUI
-## presetGUI || for CVPreset
-## interpolatorGUI || for CVInterpolator
-::
-
-The dictionary in guis can redefine how a particular key is to be drawn.
-
-Entries in this dictionary can be:
-
-DEFINITIONLIST::
-## a Symbol || the symbol selects a gui function defined in ConductorGUI,
-## an Array || the first element of the array selects the gui function which is
-used to draw the remaining elements of the array.
-## a Function || the function receives window, name and Conductor[name] as arguments
-::
-
-SECTION::Examples
-
-Here are some examples of how these features can be used:
+Here are some examples of how ConductorGUI can be used:
 
 CODE::
 (	// Default case
@@ -107,4 +57,56 @@ c = Conductor.make { | conductor, a, b|
 c.show(w:1000)
 )
 ::
+
+
+INSTANCEMETHODS::
+
+METHOD::conductor
+RETURNS::the conductor to be displayed
+
+METHOD::keys
+RETURNS:: an STRONG::Array:: of keys and arrays of keys of items in the LINK::Classes/Conductor:: to be displayed.
+DISCUSSION:: Each item in the Array is displayed on its own line, so arrays of keys share a line. Unless overridden in guis each item identified by a key is sent a draw message.
+
+
+METHOD::header
+RETURNS:: an STRONG::Array:: of keys of items to be displayed before those in keys.  Defaults to
+TELETYPE::#[player, settings, preset]::
+
+METHOD::guis
+RETURNS::an STRONG::IdentityDictionary:: of gui functions that override the normal draw method of an item in the Conductor
+
+METHOD::stopOnClose
+DISCUSSION::flag determines if Conductor is stopped when gui window is closed
+
+
+METHOD::draw
+DISCUSSION::this is the command to draw the Conductor's GUI
+
+SECTION:: Using ConductorGUI
+
+ConductorGUI  defines default gui functions for the most commonly used classes within a Conductor:
+
+TABLE::
+## cvGUI || TELETYPE::~nslider::, for single-valued CV's
+## multicvGUI || TELETYPE::~multislider::, for multi-valued CV's
+## svGUI || TELETYPE::~popup::, for SV's
+
+## settingsGUI || for ConductorSettingsGUI
+## presetGUI || for CVPreset
+## interpolatorGUI || for CVInterpolator
+::
+
+The dictionary in guis can redefine how a particular key is to be drawn.
+
+Entries in this dictionary can be:
+
+DEFINITIONLIST::
+## a Symbol || the symbol selects a gui function defined in ConductorGUI,
+## an Array || the first element of the array selects the gui function which is
+used to draw the remaining elements of the array.
+## a Function || the function receives window, name and Conductor[name] as arguments
+::
+
+
 

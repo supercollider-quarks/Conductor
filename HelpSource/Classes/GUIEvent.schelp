@@ -8,8 +8,6 @@ RELATED:: Classes/Environment, Classes/Conductor, Classes/ConductorGUI
 DESCRIPTION::
 GUIEvent defines a default 'sytle sheet' for LINK::CLasses/ConductorGUI:: objects. Currently, GUIEvent defines a single Event, held in the STRONG::classvar:: TELETYPE::osx::.
 
-NOTE:: Eventually, events for linux and win32 will also be defined.::
-
 The event defines a set of functions that create and adjust windows:
 
 TABLE::
@@ -46,22 +44,22 @@ TABLE::
 
 It defines a set of view functions that all take window, name, cv, and rect as arguments.  The argument cv can be single CV or an array.  In the latter case, the array is iterated and each element receives its own view. If rect is defined, it overrides the default Rects defined above. Below are the keys of the functions that call SCViews directly.
 
-primitives: items that directly use SCView classes
+primitives: items that directly use GUI.qt classes
 
 TABLE::
-## STRONG::label::					|| SCStaticText
-## STRONG::numberBox::			|| SCNumberBox
-## STRONG::smallNumberBox::	|| SCNumberBox
-## STRONG::slider::					|| SCSlider
-## STRONG::rangeSlider::		|| SCRangeSlider
-## STRONG::twodSlider::			|| SC2DSlider
-## STRONG::popup::					|| SCPopupMenu
-## STRONG::list::						|| SCListView
-## STRONG::movie::					|| SCMovieView
-## STRONG::popup::					|| SCPopupMenu
-## STRONG::scmultislider::	|| SCMultiSliderView
-## STRONG::knob::						|| SCKnob, uses SCCompositeView
-## STRONG::vnumerical::			|| SCNumberBox, uses SCCompositeView
+## STRONG::label::					|| StaticText
+## STRONG::numberBox::			|| NumberBox
+## STRONG::smallNumberBox::	|| NumberBox
+## STRONG::slider::					|| Slider
+## STRONG::rangeSlider::		|| RangeSlider
+## STRONG::twodSlider::			|| Slider2D
+## STRONG::popup::					|| PopupMenu
+## STRONG::list::						|| ListView
+## STRONG::movie::					|| MovieView
+## STRONG::popup::					|| PopupMenu
+## STRONG::scmultislider::	|| MultiSliderView
+## STRONG::knob::						|| Knob, uses CompositeView
+## STRONG::vnumerical::			|| NumberBox, uses CompositeView
 ::
 
 Another set of keys define labeled guis in terms of the primitives above:

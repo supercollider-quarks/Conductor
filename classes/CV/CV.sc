@@ -77,8 +77,8 @@ CV : Stream {
 			PopUpMenu:		SVSync,
 			ListView:			SVSync,
 			TabletSlider2D:	CVSyncProps(#[x, y]),
-			EzSlider:			CVSyncValue,
-			EzNumber:			CVSyncValue,
+			EZSlider:			CVSyncValue,
+			EZNumber:			CVSyncValue,
 			Knob:			CVSyncInput,
 			Button:			CVSyncValue,
 		);

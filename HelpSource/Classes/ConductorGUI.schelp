@@ -2,7 +2,7 @@ TITLE:: ConductorGUI
 
 SUMMARY:: Creates GUIs from Conductor info
 
-RELATED:: Conductor
+RELATED:: Classes/Conductor, Classes/GUIEvent
 
 DESCRIPTION::
 ConductorGUI is an Enivronment whose parent environment (defined by [GUIEvent]) is a 'style sheet'

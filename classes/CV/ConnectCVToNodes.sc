@@ -38,7 +38,7 @@ This is implemented with a dummy OSC message when freeing a Control Bus.
 	*/
 
 	connect { | view |
-		CV.viewDictionary[view.class].new(this, view) ;
+		CV.viewDictionary[view.class.asSymbol].new(this, view) ;
 	}		
 
 	buildCVConnections { | connectFunc, disconnectFuncBuilder |

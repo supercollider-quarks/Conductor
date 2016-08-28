@@ -69,22 +69,22 @@ CV : Stream {
 	
 	*buildViewDictionary {
 		var connectDictionary = (
-			numberBox:		CVSyncValue,
-			slider:			CVSyncInput,
-			rangeSlider:		CVSyncProps(#[lo, hi]),
-			slider2D:			CVSyncProps(#[x, y]),
-			multiSliderView:	CVSyncMulti,
-			popUpMenu:		SVSync,
-			listView:			SVSync,
-			tabletSlider2D:	CVSyncProps(#[x, y]),
-			ezSlider:			CVSyncValue,
-			ezNumber:			CVSyncValue,
-			knob:			CVSyncInput,
-			button:			CVSyncValue,
+			NumberBox:		CVSyncValue,
+			Slider:			CVSyncInput,
+			RangeSlider:		CVSyncProps(#[loValue, hiValue]),
+			Slider2D:			CVSyncProps(#[xValue, yValue]),
+			MultiSliderView:	CVSyncMulti,
+			PopUpMenu:		SVSync,
+			ListView:			SVSync,
+			TabletSlider2D:	CVSyncProps(#[x, y]),
+			EzSlider:			CVSyncValue,
+			EzNumber:			CVSyncValue,
+			Knob:			CVSyncInput,
+			Button:			CVSyncValue,
 		);
-		CV.viewDictionary = IdentityDictionary.new;
+		CV.viewDictionary = connectDictionary; // IdentityDictionary.new;
 		
-		GUI.schemes.do { | gui|		
+		/*GUI.schemes.do { | gui|		
 			var class;	
 			#[ 
 			numberBox, slider, rangeSlider, slider2D, multiSliderView, 
@@ -94,10 +94,10 @@ CV : Stream {
 					CV.viewDictionary.put(class, connectDictionary.at(name))
 				}
 			}
-		};
+		};*/
 	}	
 	connect { | view |
-		CV.viewDictionary[view.class].new(this, view) ;
+		CV.viewDictionary[view.class.asSymbol].new(this, view) ;
 	}	
 	
 	asControlInput { ^value.asControlInput }	

@@ -71,8 +71,8 @@ CV : Stream {
 		var connectDictionary = (
 			NumberBox:		CVSyncValue,
 			Slider:			CVSyncInput,
-			RangeSlider:		CVSyncProps(#[lo, hi]),
-			Slider2D:			CVSyncProps(#[x, y]),
+			RangeSlider:		CVSyncProps(#[loValue, hiValue]),
+			Slider2D:			CVSyncProps(#[xValue, yValue]),
 			MultiSliderView:	CVSyncMulti,
 			PopUpMenu:		SVSync,
 			ListView:			SVSync,

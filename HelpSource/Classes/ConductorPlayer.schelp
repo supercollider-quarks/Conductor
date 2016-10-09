@@ -1,6 +1,7 @@
 TITLE:: ConductorPlayer
 
 SUMMARY:: Add play/pause/stop/resume functionality to Conductor
+categories:: Control
 
 RELATED:: Classes/Conductor, Classes/CVEvent, Classes/ActionPlayer, Classes/PatternPlayer, Classes/TaskPlayer, Classes/NodeProxyPlayer, Classes/NodeEvent
 

@@ -1,7 +1,7 @@
 TITLE:: Touch
 
 SUMMARY:: special combination of ControlSpec and CV for 'touch' controls
-
+categories:: Control
 RELATED:: Classes/CV
 
 DESCRIPTION::
@@ -31,4 +31,4 @@ a.show;
 
 CLASSMETHODS::
 
-METHOD::new	
+METHOD::new

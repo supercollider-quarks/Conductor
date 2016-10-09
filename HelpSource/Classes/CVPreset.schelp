@@ -1,6 +1,7 @@
 TITLE:: CVPreset
 
 SUMMARY:: Enables saved 'presets' of CVs and other values.
+categories:: Control
 
 RELATED:: Classes/CVPreset, Classes/CVInterpolator, Classes/CV, Classes/Conductor, Classes/ConductorGUI
 

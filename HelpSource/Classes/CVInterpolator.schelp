@@ -1,6 +1,7 @@
 TITLE:: CVInterpolator
 
 SUMMARY:: Enables interpolation between saved 'presets'.
+categories:: Control
 
 RELATED:: Classes/CVPreset, Classes/CVInterpolator, Classes/CV, Classes/Conductor, Classes/ConductorGUI
 

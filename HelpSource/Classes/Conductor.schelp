@@ -1,6 +1,7 @@
 TITLE:: Conductor
 
 SUMMARY:: A framework for defining interactive programs.
+categories:: Control
 
 RELATED::  Classes/ConductorPlayer, Classes/ConductorGUI, Classes/CV, Classes/SV, Classes/CVPreset, Classes/CVInterpolator
 

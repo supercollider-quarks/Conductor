@@ -1,6 +1,7 @@
 TITLE:: SV
 
 SUMMARY:: A CV that models an index into an array.
+categories:: Control
 
 RELATED:: Classes/CV, Classes/Conductor
 

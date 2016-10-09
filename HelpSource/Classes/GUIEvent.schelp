@@ -1,6 +1,7 @@
 TITLE:: GUIEvent
 
 SUMMARY:: Defines a "style sheet" for ConductorGUI objects.
+categories:: Control
 
 RELATED:: Classes/Environment, Classes/Conductor, Classes/ConductorGUI
 

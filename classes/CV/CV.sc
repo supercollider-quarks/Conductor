@@ -96,12 +96,28 @@ CV : Stream {
 				}
 			}
 		};
-	}	
+
+		// for 3.7 and later - make sure CV finds both Slider and QSlider classes
+		CV.viewDictionary.keysValuesDo { |guiClass, syncClass|
+			if (guiClass.superclasses.includes(View)) {
+				[guiClass, guiClass.superclass];
+				CV.viewDictionary.put(guiClass.superclass, syncClass)
+			};
+		};
+	}
+
 	connect { | view |
-		CV.viewDictionary[view.class].new(this, view) ;
-	}	
-	
-	asControlInput { ^value.asControlInput }	
+		var syncClass = CV.viewDictionary[view.class];
+		if (syncClass.isNil) {
+			"% - CV.viewDictionary has no syncClass for %"
+			.format(thisMethod, view.class).warn;
+			^nil
+		};
+		^syncClass.new(this, view);
+	}
+
+	asControlInput { ^value.asControlInput }
+
 	asOSCArgEmbeddedArray { | array| ^value.asOSCArgEmbeddedArray(array) }
 
 	indexedBy { | key |

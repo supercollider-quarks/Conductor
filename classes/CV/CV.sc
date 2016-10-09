@@ -1,6 +1,6 @@
 /*
  A CV models a value constrained by a ControlSpec. The value can be a single Float or an array of Floats.
- 
+
 
  Whenever the CV's value changes, it sends a changed message labeled 'synch'.  This way dependants
  (such as GUI objects or server value) can be updated with SimpleControllers.  The method
@@ -129,7 +129,7 @@ CV : Stream {
 	}
 
 	at { | index | ^value.at(index) }
-	put { | index, val | value = value.putt(index, val) }
+	put { | index, val | value = value.put(index, val) }
 	size { ^value.size }
 
 }

@@ -13,7 +13,7 @@
 	\country: 		"USA",
 	\since: 		"2007",
 	\helpdoc: 	"help/Conductor.html",
-	\ext_dependancy: "",
+	\ext_dependency: "",
 	\url:           "",
 
 // If the quark depends on other quarks, you can specify it as a list containing:
